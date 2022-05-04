@@ -58,8 +58,6 @@ export class UserListComponent implements OnInit, AfterViewInit {
   }
 
   public customSort = (event) => {
-    console.log(event);
-    // this.dataSource.sort = event.direction;
     this.dataSource.data.sort(
       (a, b) => {
         return event.direction === 'asc' ? a[event.active] - b[event.active] : (event.direction === 'desc' ? b[event.active] - a[event.active] : a[event.active] - b[event.active]);
@@ -72,13 +70,8 @@ export class UserListComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = value.trim().toLocaleLowerCase();
   }
 
-  public redirectToDetails = (element: userData) => {
-
-  }
-
   public redirectToUpdate = (element: userData) => {
-    const id = element.Id;
-    this.router.navigate(['edit', id], { relativeTo: this.route });
+    this.router.navigate(['edit', element.Id], { relativeTo: this.route });
   }
 
 

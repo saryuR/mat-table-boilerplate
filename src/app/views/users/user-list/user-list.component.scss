@@ -1,19 +1,36 @@
-table {
-    width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    min-width: 500px;
-}
+.table-container {
+    max-height: 850px;
+    overflow: auto;
 
-th.mat-header-cell {
-    text-align: left;
-    max-width: 300px;
-    font-weight: bold;
-}
+    table {
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        min-width: 500px;
+    }
 
-.loader {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+    th.mat-header-cell {
+        text-align: left;
+        max-width: 300px;
+        font-weight: bold;
+    }
+
+    .mat-header-row {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .mat-header-row {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
 }
