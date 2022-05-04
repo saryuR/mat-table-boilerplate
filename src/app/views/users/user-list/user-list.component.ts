@@ -6,38 +6,46 @@ import { MatPaginator } from '@angular/material/paginator';
 import { UsersService } from '../../../shared/services/users.service';
 import { userData } from '../../../_interface/user.model';
 import { users } from './users';
- 
+
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss']
 })
 export class UserListComponent implements OnInit, AfterViewInit {
- 
+
   public displayedColumns = ['firstName', 'lastName', 'email', 'walshrole', 'update', 'delete'];
   public dataSource = new MatTableDataSource<userData>();
   public users: userData[] = users;
+  public isAdmin = false;
+  public adminRoleId = 3;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  pageNumber = 0; 
+  pageNumber = 0;
   pageSize = 2;
   loading = false;
- 
-  constructor(private route:ActivatedRoute, private router: Router,private usersService: UsersService) { }
- 
+
+  constructor(private route: ActivatedRoute, private router: Router, private usersService: UsersService) { }
+
   ngOnInit() {
     this.getAllUsers();
   }
- 
+
   public getAllUsers = () => {
     this.loading = true;
     const currentLoggedInUser = this.getLoggedInUser();
+    this.isAdmin = this.isAccountAdmin(currentLoggedInUser.Accounts[0].Roles);
     this.usersService.getData(currentLoggedInUser.Accounts[0].AccountId, this.pageNumber, this.pageSize)
-    .subscribe((res: any) => {
-      this.dataSource.data = res as userData[];
-      this.loading = false;
-    });
+      .subscribe((res: any) => {
+        this.dataSource.data = res as userData[];
+        this.loading = false;
+      });
+  }
+
+  isAccountAdmin(roles) {
+    const admin = roles.find(x => x.Id === this.adminRoleId);
+    return admin ? true : false;
   }
 
   getLoggedInUser() {
@@ -54,32 +62,32 @@ export class UserListComponent implements OnInit, AfterViewInit {
     // this.dataSource.sort = event.direction;
     this.dataSource.data.sort(
       (a, b) => {
-          return event.direction === 'asc' ? a[event.active] - b[event.active] : (event.direction === 'desc' ? b[event.active] - a[event.active] : a[event.active] - b[event.active]);
+        return event.direction === 'asc' ? a[event.active] - b[event.active] : (event.direction === 'desc' ? b[event.active] - a[event.active] : a[event.active] - b[event.active]);
       }
-  );
+    );
 
   }
 
   public doFilter = (value: string) => {
     this.dataSource.filter = value.trim().toLocaleLowerCase();
   }
- 
+
   public redirectToDetails = (element: userData) => {
-    
+
   }
- 
+
   public redirectToUpdate = (element: userData) => {
     const id = element.Id;
-    this.router.navigate(['edit', id], {relativeTo: this.route});
+    this.router.navigate(['edit', id], { relativeTo: this.route });
   }
 
 
   public addUser() {
-    this.router.navigate(['create-user'], {relativeTo: this.route});
+    this.router.navigate(['create-user'], { relativeTo: this.route });
   }
- 
+
   public redirectToDelete = (id: string) => {
-    
+
   }
- 
+
 }
