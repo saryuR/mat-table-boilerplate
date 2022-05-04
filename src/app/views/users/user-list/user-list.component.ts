@@ -20,6 +20,8 @@ export class UserListComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  pageNumber = 0; 
+  pageSize = 2;
  
   constructor(private route:ActivatedRoute, private router: Router,private usersService: UsersService) { }
  
@@ -28,11 +30,15 @@ export class UserListComponent implements OnInit, AfterViewInit {
   }
  
   public getAllUsers = () => {
-    this.dataSource.data = this.users;
-    // this.usersService.getData('api/owner')
-    // .subscribe(res => {
-    //   this.dataSource.data = res as userData[];
-    // })
+    const currentLoggedInUser = this.getLoggedInUser();
+    this.usersService.getData(currentLoggedInUser.Accounts[0].AccountId, this.pageNumber, this.pageSize)
+    .subscribe((res: any) => {
+      this.dataSource.data = res as userData[];
+    })
+  }
+
+  getLoggedInUser() {
+    return JSON.parse(localStorage.getItem('currentLoggedInUser'));
   }
 
   ngAfterViewInit(): void {
