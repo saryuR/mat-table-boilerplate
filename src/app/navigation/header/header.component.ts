@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { AccountService } from 'src/app/shared/services/account.service';
+import { AccountService } from '../../shared/services/account.service';
 
 @Component({
   selector: 'app-header',
@@ -13,10 +13,14 @@ export class HeaderComponent implements OnInit {
   constructor(public accountService: AccountService) { }
 
   ngOnInit(): void {
+    this.accountService.userSubject.subscribe(res => {
+      this.setNavBar()
+    });
+  }
+
+  setNavBar() {
     const user = this.accountService.userValue;
-        if (Object.keys(user).length === 0) {
-          this.showNavigation = false;
-        }
+    this.showNavigation = Object.keys(user).length === 0 ? false : true;
   }
   
   public onToggleSidenav = () => {

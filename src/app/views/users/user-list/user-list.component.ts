@@ -22,6 +22,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageNumber = 0; 
   pageSize = 2;
+  loading = false;
  
   constructor(private route:ActivatedRoute, private router: Router,private usersService: UsersService) { }
  
@@ -30,11 +31,13 @@ export class UserListComponent implements OnInit, AfterViewInit {
   }
  
   public getAllUsers = () => {
+    this.loading = true;
     const currentLoggedInUser = this.getLoggedInUser();
     this.usersService.getData(currentLoggedInUser.Accounts[0].AccountId, this.pageNumber, this.pageSize)
     .subscribe((res: any) => {
       this.dataSource.data = res as userData[];
-    })
+      this.loading = false;
+    });
   }
 
   getLoggedInUser() {

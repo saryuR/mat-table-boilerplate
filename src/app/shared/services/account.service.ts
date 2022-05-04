@@ -38,10 +38,6 @@ export class AccountService {
             }));
     }
 
-    getAll() {
-        return this.http.get<userData[]>(`${environment.urlAddress}/users`);
-    }
-
     getById(userid: string) {
         return this.http.get<userData>(`${environment.urlAddress}/api/UserAccount/GetByUserId?userid=${userid}`);
     }

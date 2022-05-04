@@ -4,8 +4,16 @@ table {
     overflow-y: hidden;
     min-width: 500px;
 }
- 
+
 th.mat-header-cell {
     text-align: left;
     max-width: 300px;
+    font-weight: bold;
+}
+
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
 }
