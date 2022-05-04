@@ -1,12 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body {
-    margin: 0; 
-    height: 100%; 
+html,
+body {
+    margin: 0;
+    height: 100%;
 }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 .adjust-div {
     display: grid;
     height: 70px;
+}
+
+.mat-select {
+    background: white;
+    height: 40px;
+    outline: none;
+    border: 1px solid #e4e7ea;
 }

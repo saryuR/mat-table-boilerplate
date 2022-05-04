@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { userData } from 'src/app/_interface/user.model';
+import { common, userData } from 'src/app/_interface/user.model';
 import { environment } from 'src/environments/environment';
 
 
@@ -66,6 +66,14 @@ export class AccountService {
             }));
     }
 
+    sendInvitation(params: any) {
+        return this.http.post(`${environment.urlAddress}/api/UserAccount/SendInvitation`, params)
+            .pipe(map(x => {
+                return x;
+            }));
+        
+    }
+
     delete(id: string) {
         // return this.http.delete(`${environment.urlAddress}/users/${id}`)
         //     .pipe(map(x => {
@@ -78,15 +86,20 @@ export class AccountService {
     }
 
 
+    
+    getUserPrefix() {
+        return this.http.get<common[]>(`${environment.urlAddress}/api/UserAccount/GetUserPrefix`);
+    }
+
     getLocalJobTitles(accountId: string) {
-        return this.http.get<userData>(`${environment.urlAddress}/api/LocalJobTitles?accountId=${accountId}&sorted=true`);
+        return this.http.get<common[]>(`${environment.urlAddress}/api/LocalJobTitles?accountId=${accountId}&sorted=true`);
     }
 
     getLocalDepartment(accountId: string) {
-        return this.http.get<userData>(`${environment.urlAddress}/api/LocalDepartment?accountId=${accountId}&sorted=false`);
+        return this.http.get<common[]>(`${environment.urlAddress}/api/LocalDepartment?accountId=${accountId}&sorted=false`);
     }
 
     getReportsTo(accountId: string) {
-        return this.http.get<userData>(`${environment.urlAddress}/api/localJobTitles/reportsTo?accountId=${accountId}`);
+        return this.http.get<common[]>(`${environment.urlAddress}/api/localJobTitles/reportsTo?accountId=${accountId}`);
     }
 }

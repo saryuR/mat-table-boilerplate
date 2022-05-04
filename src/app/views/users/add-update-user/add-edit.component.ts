@@ -38,6 +38,7 @@ export class AddEditComponent implements OnInit {
             JobTitles: ['', Validators.required],
             ReportsTo: ['', Validators.required],
             Roles: ['', Validators.required],
+            sendInvitation: [false]
         });
 
         if (!this.isAddMode) {
@@ -66,6 +67,18 @@ export class AddEditComponent implements OnInit {
         console.log(keys, keys.join(','))
         return keys.join(',');
     }
+
+
+    // initUserDetails() {
+    //     forkJoin(
+    //         'Pre': this.accountService.getUserPrefix(),
+    //         'Roles': this.accountService.getUserPrefix(),
+    //         'Roles': this.accountService.getUserPrefix(),
+    //         'Roles': this.accountService.getUserPrefix(),
+    //         'Roles': this.accountService.getUserPrefix(),
+
+    //     )
+    // }
 
     getUserRoles() {
         this.roleTypes = [
@@ -106,7 +119,15 @@ export class AddEditComponent implements OnInit {
         this.accountService.register(this.form.value)
             .pipe(first())
             .subscribe({
-                next: () => {
+                next: (res: any) => {
+                    if (this.form.value.sendInvitation) {
+                        const config = {
+                            UserId: res.UserId,
+                            Email: res.Email,
+                            AccountId: res.AccountId
+                        }
+                        this.accountService.sendInvitation(config).subscribe(() => { });
+                    }
                     this.alertService.success('User added successfully', { keepAfterRouteChange: true });
                     this.router.navigate(['../'], { relativeTo: this.route });
                 },

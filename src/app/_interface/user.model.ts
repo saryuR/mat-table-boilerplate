@@ -91,3 +91,8 @@ export interface roles {
       Id: number;
       Name: String;
 }
+
+export interface common {
+  Id: number;
+  Name: String;
+}
