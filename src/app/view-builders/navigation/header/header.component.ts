@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { AccountService } from '../../shared/services/account.service';
+import { AccountService } from '../../../shared/services/account.service';
 
 @Component({
   selector: 'app-header',

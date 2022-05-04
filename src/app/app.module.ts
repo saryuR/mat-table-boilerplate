@@ -7,21 +7,23 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { ErrorInterceptor, JwtInterceptor } from './_helpers';
 import { MaterialModule } from './shared/material/material.module';
-import { LayoutComponent } from './layout/layout.component';
+import { LayoutComponent } from './view-builders/layout/layout.component';
 import { HomeComponent } from './views/home/home.component';
-import { RoutingModule } from './routing/routing.module';
-import { HeaderComponent } from './navigation/header/header.component';
-import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
+import { RoutingModule } from './view-builders/routing/routing.module';
+import { HeaderComponent } from './view-builders/navigation/header/header.component';
+import { SidenavListComponent } from './view-builders/navigation/sidenav-list/sidenav-list.component';
 import { AlertComponent } from './shared/alert/alert.component';
 
+const mainComponents = [
+  AppComponent,
+  LayoutComponent,
+  HomeComponent,
+  HeaderComponent,
+  SidenavListComponent,
+  AlertComponent];
 @NgModule({
   declarations: [
-    AppComponent,
-    LayoutComponent,
-    HomeComponent,
-    HeaderComponent,
-    SidenavListComponent,
-    AlertComponent
+    ...mainComponents
   ],
   imports: [
     BrowserModule,
