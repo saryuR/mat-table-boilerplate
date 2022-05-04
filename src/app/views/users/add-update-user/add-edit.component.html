@@ -1,0 +1,99 @@
+<h3 *ngIf="isAddMode" class="text-center">Add User</h3>
+<h3 *ngIf="!isAddMode" class="text-center">Edit User</h3>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+        
+        <div class="form-group col">
+            <label for="Prefix">Prefix</label>
+            <input type="text" formControlName="Prefix" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.Prefix.errors }" />
+            <div *ngIf="submitted && f.Prefix.errors" class="invalid-feedback">
+                <div *ngIf="f.Prefix.errors.required">Prefix is required</div>
+            </div>
+        </div>
+        <div class="form-group col">
+            <label for="FirstName">First Name</label>
+            <input type="text" formControlName="FirstName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.FirstName.errors }" />
+            <div *ngIf="submitted && f.FirstName.errors" class="invalid-feedback">
+                <div *ngIf="f.FirstName.errors.required">First Name is required</div>
+            </div>
+        </div>
+        <div class="form-group col">
+            <label for="LastName">Last Name</label>
+            <input type="text" formControlName="LastName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.LastName.errors }" />
+            <div *ngIf="submitted && f.LastName.errors" class="invalid-feedback">
+                <div *ngIf="f.LastName.errors.required">Last Name is required</div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <label for="Email">Email</label>
+            <input type="email" formControlName="Email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.Email.errors }" />
+            <div *ngIf="submitted && f.Email.errors" class="invalid-feedback">
+                <div *ngIf="f.Email.errors.required">Email is required</div>
+            </div>
+        </div>
+        <div class="form-group col">
+            <label for="PhoneNumber">
+                Phone Number
+            </label>
+            <input type="number" formControlName="PhoneNumber" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.PhoneNumber.errors }" />
+            <div *ngIf="submitted && f.PhoneNumber.errors" class="invalid-feedback">
+                <div *ngIf="f.PhoneNumber.errors.required">Phone Number is required</div>
+            </div>
+        </div>
+        <div class="form-group col">
+            <label for="Departments">
+                Departments
+            </label>
+            <input type="text" formControlName="Departments" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.Departments.errors }" />
+            <div *ngIf="submitted && f.Departments.errors" class="invalid-feedback">
+                <div *ngIf="f.Departments.errors.required">Departments is required</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col">
+            <label for="JobTitles">Job Title</label>
+            <input type="text" formControlName="JobTitles" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.JobTitles.errors }" />
+            <div *ngIf="submitted && f.JobTitles.errors" class="invalid-feedback">
+                <div *ngIf="f.JobTitles.errors.required">JobTitles is required</div>
+            </div>
+        </div>
+        <div class="form-group col">
+            <label for="ReportsTo">
+                Reports To
+            </label>
+            <input type="text" formControlName="ReportsTo" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.ReportsTo.errors }" />
+            <div *ngIf="submitted && f.ReportsTo.errors" class="invalid-feedback">
+                <div *ngIf="f.ReportsTo.errors.required">Reports To is required</div>
+            </div>
+        </div>
+        <div class="form-group col adjust-div">
+            <label for="Roles">
+                Roles
+            </label>
+        
+                  <select formControlName="Roles" multiple>
+                    <option value="" disabled selected>Select the role</option>
+                    <option [value]="type.Id" *ngFor="let type of roleTypes">{{type.Name}}</option>
+                </select>
+              
+            <div *ngIf="submitted && f.Roles.errors" class="invalid-feedback">
+                <div *ngIf="f.Roles.errors.required">Roles are required</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <button [disabled]="loading" class="btn btn-primary">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Save
+        </button>
+        <a routerLink="/users" class="btn btn-link">Cancel</a>
+    </div>
+</form>
