@@ -71,7 +71,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
   }
 
   public redirectToUpdate = (element: userData) => {
-    this.router.navigate(['edit', element.Id], { relativeTo: this.route });
+    this.router.navigate(['edit', element.UserId], { relativeTo: this.route });
   }
 
 

@@ -43,7 +43,10 @@ export class AccountService {
     }
 
     update(id: string, params: userData) {
-        return this.http.put(`${environment.urlAddress}/users/${id}`, params)
+        
+        return this.http.put(`${environment.urlAddress}/api/UserAccount/Update`, params)
+
+        // return this.http.put(`${environment.urlAddress}/users/${id}`, params)
             .pipe(map(x => {
                 // update stored user if the logged in user updated their own record
                 if (id === (this.userValue.Id).toString()) {
@@ -58,8 +61,8 @@ export class AccountService {
             }));
     }
 
-    register(params: userData) {
-        return this.http.put(`${environment.urlAddress}/users/`, params)
+    register(params: any) {
+        return this.http.post(`${environment.urlAddress}/api/UserAccount/Create`, params)
             .pipe(map(x => {
                 // update stored user if the logged in user updated their own record
                 // if (id === (this.userValue.Id).toString()) {
@@ -83,5 +86,18 @@ export class AccountService {
         //         }
         //         return x;
         //     }));
+    }
+
+
+    getLocalJobTitles(accountId: string) {
+        return this.http.get<userData>(`${environment.urlAddress}/api/LocalJobTitles?accountId=${accountId}&sorted=true`);
+    }
+
+    getLocalDepartment(accountId: string) {
+        return this.http.get<userData>(`${environment.urlAddress}/api/LocalDepartment?accountId=${accountId}&sorted=false`);
+    }
+
+    getReportsTo(accountId: string) {
+        return this.http.get<userData>(`${environment.urlAddress}/api/localJobTitles/reportsTo?accountId=${accountId}`);
     }
 }
