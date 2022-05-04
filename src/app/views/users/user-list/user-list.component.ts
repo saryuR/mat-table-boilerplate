@@ -86,8 +86,13 @@ export class UserListComponent implements OnInit, AfterViewInit {
     this.router.navigate(['create-user'], { relativeTo: this.route });
   }
 
-  public redirectToDelete = (id: string) => {
-
+  public markUserAsInActive = (element: userData) => {
+    const payload: any = element;
+    payload.Status = 'Active';
+    payload.AccountId = payload.Accounts[0].AccountId;
+    this.usersService.update('api/UserAccount/Update', payload).subscribe(response => {
+      console.log('updated');
+    });
   }
 
 }
