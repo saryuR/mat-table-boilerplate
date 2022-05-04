@@ -1,3 +1,5 @@
 <section fxLayout="column" fxFlexAlign="stretch"> 
-  <p> Hi user , welcome to Walsh Role assesmemt</p>
+  <ng-container *ngIf="userData">
+    <h6 class="text-center"> Hi {{userData.DisplayName}}, welcome to Walsh Role assesmemt</h6>
+  </ng-container>
 </section>

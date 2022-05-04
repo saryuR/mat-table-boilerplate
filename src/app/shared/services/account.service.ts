@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { userData } from 'src/app/_interface/user.model';
@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-    private userSubject: BehaviorSubject<userData>;
+    public userSubject: BehaviorSubject<userData>;
     public user: Observable<userData>;
 
     constructor(
@@ -24,8 +24,12 @@ export class AccountService {
         return this.userSubject.value;
     }
 
-    login(useremail: string, password: string) {
-        return this.http.post<userData>(`${environment.urlAddress}/token`, { useremail, password })
+    login(username: string, password: string, grant_type: string) {
+        let httpOptions = {
+            headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }),
+        };
+        let body = `username=${username}&password=${password}&grant_type=${grant_type}`;
+        return this.http.post<userData>(`${environment.urlAddress}/token`, body, httpOptions)
             .pipe(map(user => {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 localStorage.setItem('user', JSON.stringify(user));
@@ -34,23 +38,12 @@ export class AccountService {
             }));
     }
 
-    // logout() {
-    //     // remove user from local storage and set current user to null
-    //     localStorage.removeItem('user');
-    //     this.userSubject.next(null);
-    //     this.router.navigate(['/account/login']);
-    // }
-
-    register(user: userData) {
-        return this.http.post(`${environment.urlAddress}/users/register`, user);
-    }
-
     getAll() {
         return this.http.get<userData[]>(`${environment.urlAddress}/users`);
     }
 
-    getById(id: string) {
-        return this.http.get<userData>(`${environment.urlAddress}/users/${id}`);
+    getById(userid: string) {
+        return this.http.get<userData>(`${environment.urlAddress}/api/UserAccount/GetByUserId?userid=${userid}`);
     }
 
     update(id: string, params: userData) {
@@ -65,6 +58,22 @@ export class AccountService {
                     // publish updated user to subscribers
                     this.userSubject.next(user);
                 }
+                return x;
+            }));
+    }
+
+    register(params: userData) {
+        return this.http.put(`${environment.urlAddress}/users/`, params)
+            .pipe(map(x => {
+                // update stored user if the logged in user updated their own record
+                // if (id === (this.userValue.Id).toString()) {
+                    // update local storage
+                    const user = { ...this.userValue, ...params };
+                    localStorage.setItem('user', JSON.stringify(user));
+
+                    // publish updated user to subscribers
+                    this.userSubject.next(user);
+                // }
                 return x;
             }));
     }
