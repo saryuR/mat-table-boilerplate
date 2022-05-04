@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { common, userData } from 'src/app/_interface/user.model';
+import { common, Prefix, userData } from 'src/app/_interface/user.model';
 import { environment } from 'src/environments/environment';
 
 
@@ -23,7 +23,7 @@ export class AccountService {
     public get userValue(): userData {
         return this.userSubject.value;
     }
-
+    
     login(username: string, password: string, grant_type: string) {
         let httpOptions = {
             headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }),
@@ -88,18 +88,18 @@ export class AccountService {
 
     
     getUserPrefix() {
-        return this.http.get<common[]>(`${environment.urlAddress}/api/UserAccount/GetUserPrefix`);
+        return this.http.get<Prefix[]>(`${environment.urlAddress}/api/UserAccount/GetUserPrefix`);
     }
 
-    getLocalJobTitles(accountId: string) {
+    getLocalJobTitles(accountId: number) {
         return this.http.get<common[]>(`${environment.urlAddress}/api/LocalJobTitles?accountId=${accountId}&sorted=true`);
     }
 
-    getLocalDepartment(accountId: string) {
+    getLocalDepartment(accountId: number) {
         return this.http.get<common[]>(`${environment.urlAddress}/api/LocalDepartment?accountId=${accountId}&sorted=false`);
     }
 
-    getReportsTo(accountId: string) {
+    getReportsTo(accountId: number) {
         return this.http.get<common[]>(`${environment.urlAddress}/api/localJobTitles/reportsTo?accountId=${accountId}`);
     }
 }

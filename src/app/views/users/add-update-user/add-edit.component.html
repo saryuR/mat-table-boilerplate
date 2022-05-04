@@ -6,13 +6,11 @@
         <div class="form-group col">
             <label for="Prefix">Prefix</label>
             <mat-select placeholder="Select Prefix" formControlName="Prefix">
-                <mat-option *ngFor="let type of roleTypes" [value]="type.Id">
-                    {{type.Name}}
+                <mat-option *ngFor="let type of prefixs" [value]="type.Id">
+                    {{type.Prefix}}
                 </mat-option>
             </mat-select>
-
-            <!-- <input type="text" formControlName="Prefix" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.Prefix.errors }" /> -->
-            <div *ngIf="submitted && f.Prefix.errors" class="invalid-feedback">
+           <div *ngIf="submitted && f.Prefix.errors" class="invalid-feedback">
                 <div *ngIf="f.Prefix.errors.required">Prefix is required</div>
             </div>
         </div>
@@ -54,10 +52,15 @@
         </div>
         <div class="form-group col">
             <label for="Departments">
-                Departments
+                Department
             </label>
-            <input type="text" formControlName="Departments" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.Departments.errors }" />
+            <mat-select placeholder="Select Department" formControlName="Departments" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.Departments.errors }">
+                <mat-option *ngFor="let type of localDepartment" [value]="type.Id">
+                    {{type.Name}}
+                </mat-option>
+            </mat-select>
+
             <div *ngIf="submitted && f.Departments.errors" class="invalid-feedback">
                 <div *ngIf="f.Departments.errors.required">Departments is required</div>
             </div>
@@ -67,8 +70,11 @@
     <div class="form-row">
         <div class="form-group col">
             <label for="JobTitles">Job Title</label>
-            <input type="text" formControlName="JobTitles" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.JobTitles.errors }" />
+            <mat-select placeholder="Select Job Title" formControlName="JobTitleId">
+                <mat-option *ngFor="let type of localJobTitles" [value]="type.Id">
+                    {{type.Name}}
+                </mat-option>
+            </mat-select>
             <div *ngIf="submitted && f.JobTitles.errors" class="invalid-feedback">
                 <div *ngIf="f.JobTitles.errors.required">JobTitles is required</div>
             </div>
@@ -87,10 +93,11 @@
             <label for="Roles">
                 Roles
             </label>
-            <select formControlName="Roles" multiple>
-                <option value="" disabled selected>Select the role</option>
-                <option [value]="type.Id" *ngFor="let type of roleTypes">{{type.Name}}</option>
-            </select>
+            <mat-select placeholder="Select Roles" formControlName="Roles" multiple>
+                <mat-option *ngFor="let type of roleTypes" [value]="type.Id">
+                    {{type.Name}}
+                </mat-option>
+            </mat-select>
 
             <div *ngIf="submitted && f.Roles.errors" class="invalid-feedback">
                 <div *ngIf="f.Roles.errors.required">Roles are required</div>

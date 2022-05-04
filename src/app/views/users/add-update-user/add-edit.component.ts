@@ -4,7 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { AccountService } from '../../../shared/services/account.service';
 import { AlertService } from '../../../shared/services/alert.service';
-import { roles, userData } from 'src/app/_interface/user.model';
+import { common, extras, Prefix, roles, userData } from 'src/app/_interface/user.model';
+import { forkJoin } from 'rxjs';
 
 
 @Component({ templateUrl: 'add-edit.component.html' })
@@ -15,6 +16,10 @@ export class AddEditComponent implements OnInit {
     isAddMode: boolean;
     loading = false;
     submitted = false;
+    prefixs: Prefix[];
+    localJobTitles: common[];
+    localDepartment: common[];
+    ReportsTo: common[];
 
     constructor(
         private formBuilder: FormBuilder,
@@ -25,6 +30,7 @@ export class AddEditComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        this.initUserDetails();
         this.userId = this.route.snapshot.params['id'];
         this.isAddMode = !this.userId;
         this.getUserRoles();
@@ -35,7 +41,7 @@ export class AddEditComponent implements OnInit {
             Email: ['', [Validators.required, Validators.email]],
             PhoneNumber: ['', Validators.required],
             Departments: ['', Validators.required],
-            JobTitles: ['', Validators.required],
+            JobTitleId: ['', Validators.required],
             ReportsTo: ['', Validators.required],
             Roles: ['', Validators.required],
             sendInvitation: [false]
@@ -55,10 +61,10 @@ export class AddEditComponent implements OnInit {
         this.form.patchValue(userDetails);
         const userAccount = userDetails.Accounts[0];
         this.f.Roles.setValue(userAccount.Roles);
-        this.f.ReportsTo.setValue(this.getNames(userAccount.ReportsTo, 'Name'));
-        this.f.JobTitles.setValue(this.getNames(userAccount.JobTitles, 'Name'));
-        this.f.Departments.setValue(this.getNames(userAccount.Departments, 'Name'));
-        this.f.Prefix.setValue(userDetails.UserPrefix);
+        // this.f.ReportsTo.setValue(this.getNames(userAccount.ReportsTo, 'Name'));
+        // this.f.JobTitles.setValue(this.getNames(userAccount.JobTitles, 'Name'));
+        // this.f.Departments.setValue(this.getNames(userAccount.Departments, 'Name'));
+        // this.f.Prefix.setValue(userDetails.UserPrefix);
     }
 
     getNames(data: any[], key: string): string {
@@ -68,17 +74,25 @@ export class AddEditComponent implements OnInit {
         return keys.join(',');
     }
 
+    getLoggedInUser() {
+        return JSON.parse(localStorage.getItem('currentLoggedInUser'));
+    }
 
-    // initUserDetails() {
-    //     forkJoin(
-    //         'Pre': this.accountService.getUserPrefix(),
-    //         'Roles': this.accountService.getUserPrefix(),
-    //         'Roles': this.accountService.getUserPrefix(),
-    //         'Roles': this.accountService.getUserPrefix(),
-    //         'Roles': this.accountService.getUserPrefix(),
+    initUserDetails() {
+        const loggedinUser = this.getLoggedInUser();
+        const Prefix$ = this.accountService.getUserPrefix();
+        const LocalJobTitles$ = this.accountService.getLocalJobTitles(loggedinUser.Accounts[0].AccountId);
+        const LocalDepartment$ = this.accountService.getLocalDepartment(loggedinUser.Accounts[0].AccountId);
+        const getReportsTo$ = this.accountService.getReportsTo(loggedinUser.Accounts[0].AccountId);
 
-    //     )
-    // }
+        forkJoin([Prefix$, LocalJobTitles$, LocalDepartment$, getReportsTo$])
+            .subscribe(res => {
+                this.prefixs = res[0];
+                this.localJobTitles = res[1];
+                this.localDepartment = res[2];
+                this.ReportsTo = res[3];
+            });
+    }
 
     getUserRoles() {
         this.roleTypes = [

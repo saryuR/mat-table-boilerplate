@@ -96,3 +96,16 @@ export interface common {
   Id: number;
   Name: String;
 }
+
+export interface Prefix {
+  Id: number;
+  Prefix: String;
+}
+
+export interface extras {
+  prefixs: Prefix[];
+  localJobTitles: common[];
+  localDepartment: common[];
+  ReportsTo: common[];
+
+}
