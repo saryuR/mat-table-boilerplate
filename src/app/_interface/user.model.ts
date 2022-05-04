@@ -7,6 +7,7 @@ export interface userData {
     FirstName: string;
     LastName: string;
     DisplayName: string;
+    token?: string;
     Accounts: [
       {
         AccountId: number;
