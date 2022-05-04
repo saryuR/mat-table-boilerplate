@@ -102,4 +102,9 @@ export class AccountService {
     getReportsTo(accountId: number) {
         return this.http.get<common[]>(`${environment.urlAddress}/api/localJobTitles/reportsTo?accountId=${accountId}`);
     }
+
+    getRoles(userid: string, accountId: number) {
+        return this.http.get<common[]>(`${environment.urlAddress}/api/Roles?userId=${userid}&accountId=${accountId}`);
+    }
+
 }

@@ -19,7 +19,7 @@ export class AddEditComponent implements OnInit {
     prefixs: Prefix[];
     localJobTitles: common[];
     localDepartment: common[];
-    ReportsTo: common[];
+    reportsTo: common[];
 
     constructor(
         private formBuilder: FormBuilder,
@@ -33,7 +33,6 @@ export class AddEditComponent implements OnInit {
         this.initUserDetails();
         this.userId = this.route.snapshot.params['id'];
         this.isAddMode = !this.userId;
-        this.getUserRoles();
         this.form = this.formBuilder.group({
             Prefix: ['', Validators.required],
             FirstName: ['', Validators.required],
@@ -83,28 +82,17 @@ export class AddEditComponent implements OnInit {
         const Prefix$ = this.accountService.getUserPrefix();
         const LocalJobTitles$ = this.accountService.getLocalJobTitles(loggedinUser.Accounts[0].AccountId);
         const LocalDepartment$ = this.accountService.getLocalDepartment(loggedinUser.Accounts[0].AccountId);
-        const getReportsTo$ = this.accountService.getReportsTo(loggedinUser.Accounts[0].AccountId);
+        const ReportsTo$ = this.accountService.getReportsTo(loggedinUser.Accounts[0].AccountId);
+        const roles$ = this.accountService.getRoles(loggedinUser.UserId, loggedinUser.Accounts[0].AccountId)
 
-        forkJoin([Prefix$, LocalJobTitles$, LocalDepartment$, getReportsTo$])
+        forkJoin({Prefix$, LocalJobTitles$, LocalDepartment$, ReportsTo$, roles$})
             .subscribe(res => {
-                this.prefixs = res[0];
-                this.localJobTitles = res[1];
-                this.localDepartment = res[2];
-                this.ReportsTo = res[3];
+                this.prefixs = res.Prefix$;
+                this.localJobTitles = res.LocalJobTitles$;
+                this.localDepartment = res.LocalDepartment$;
+                this.reportsTo = res.ReportsTo$;
+                this.roleTypes = res.roles$;
             });
-    }
-
-    getUserRoles() {
-        this.roleTypes = [
-            {
-                Id: 1,
-                Name: 'manager'
-            },
-            {
-                Id: 2,
-                Name: 'CA'
-            }
-        ]
     }
 
     // convenience getter for easy access to form fields
