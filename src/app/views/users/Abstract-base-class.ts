@@ -7,7 +7,7 @@ import { common, Prefix, roles, userData } from '../../_interface/user.model';
 
 
 @Injectable()
-export abstract class AbstractBaseClassComponent implements OnDestroy{
+export abstract class AbstractBaseClassComponent implements OnDestroy {
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public displayedColumns = ['firstName', 'lastName', 'email', 'walshrole', 'update', 'delete'];
   pageNumber = 0;
@@ -29,7 +29,7 @@ export abstract class AbstractBaseClassComponent implements OnDestroy{
     this.isAdmin = this.isAccountAdmin(this.loggedinUser.Accounts[0].Roles);
   }
 
-  public isAccountAdmin(roles): boolean {
+  public isAccountAdmin(roles: common[]): boolean {
     const admin = roles.find(x => x.Id === this.adminRoleId);
     return admin ? true : false;
   }
@@ -40,7 +40,7 @@ export abstract class AbstractBaseClassComponent implements OnDestroy{
   }
 
   public preparePayload(isUpdate: boolean, userData: any, isInActive?: boolean): any {
-    let payload: any = {
+    const payload: any = {
       LoggedInRoleId: this.adminRoleId,
       AccountId: this.loggedinUser.Accounts[0].AccountId,
       Roles: userData.Roles,
@@ -58,7 +58,7 @@ export abstract class AbstractBaseClassComponent implements OnDestroy{
       Status: 'Active',
       LockoutEnabled: false,
       DataStateFlag: 'I'
-    }
+    };
     if (isUpdate) {
       payload.Id = userData.Id;
       payload.UserId = userData.UserId;
@@ -74,7 +74,7 @@ export abstract class AbstractBaseClassComponent implements OnDestroy{
     const LocalJobTitles$ = this.accountService.getLocalJobTitles(this.AccountId);
     const LocalDepartment$ = this.accountService.getLocalDepartment(this.AccountId);
     const ReportsTo$ = this.accountService.getReportsTo(this.AccountId);
-    const roles$ = this.accountService.getRoles(this.loggedinUser.UserId, this.AccountId)
+    const roles$ = this.accountService.getRoles(this.loggedinUser.UserId, this.AccountId);
 
     forkJoin({ Prefix$, LocalJobTitles$, LocalDepartment$, ReportsTo$, roles$ })
       .pipe(takeUntil(this.destroyed$))

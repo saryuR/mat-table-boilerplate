@@ -63,7 +63,7 @@ export class AddEditComponent extends AbstractBaseClassComponent implements OnIn
         this.f.JobTitleId.setValue(userAccount?.JobTitles[0]?.Id);
         this.f.Departments.setValue(userAccount?.Departments[0]?.Id);
         const selectedRoles = [];
-        userAccount.Roles.forEach(data => { selectedRoles.push(data.Id) });
+        userAccount.Roles.forEach(data => { selectedRoles.push(data.Id); });
         this.f.Roles.setValue(selectedRoles);
     }
 
@@ -101,7 +101,7 @@ export class AddEditComponent extends AbstractBaseClassComponent implements OnIn
                             UserId: this.loggedinUser.UserId,
                             Email: this.form.value.Email,
                             AccountId: this.AccountId
-                        }
+                        };
                         this.accountService.sendInvitation(config).pipe(takeUntil(this.destroyed$)).subscribe(() => { });
                     }
                     this.alertService.success('User added successfully', { keepAfterRouteChange: true });

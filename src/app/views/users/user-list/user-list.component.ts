@@ -37,7 +37,7 @@ export class UserListComponent extends AbstractBaseClassComponent implements OnI
   public getAllUsers = () => {
     this.loading = true;
     this.accountService.getData(this.AccountId, this.pageNumber, this.pageSize)
-    .pipe(takeUntil(this.destroyed$))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe((res: any) => {
         this.dataSource.data = res as userData[];
         this.loading = false;
@@ -52,7 +52,8 @@ export class UserListComponent extends AbstractBaseClassComponent implements OnI
   public customSort = (event) => {
     this.dataSource.data.sort(
       (a, b) => {
-        return event.direction === 'asc' ? a[event.active] - b[event.active] : (event.direction === 'desc' ? b[event.active] - a[event.active] : a[event.active] - b[event.active]);
+        return event.direction === 'asc' ? a[event.active] - b[event.active] :
+          (event.direction === 'desc' ? b[event.active] - a[event.active] : a[event.active] - b[event.active]);
       }
     );
 
@@ -76,7 +77,7 @@ export class UserListComponent extends AbstractBaseClassComponent implements OnI
     element.ReportsTo = element.Accounts[0].ReportsTo[0].Id;
     element.Roles = [element.Accounts[0].Roles[0].Id];
     element.Prefix = element.Prefix.length > 0 ? element.Prefix[0]?.Prefix : 'Mrs.';
-    let payload = this.preparePayload(true, element, true);
+    const payload = this.preparePayload(true, element, true);
     this.accountService.update(element.UserId, payload).subscribe(() => {
       this.alertService.success('Update successful', { keepAfterRouteChange: true });
       this.getAllUsers();

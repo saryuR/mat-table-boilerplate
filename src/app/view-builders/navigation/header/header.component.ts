@@ -9,12 +9,12 @@ import { AccountService } from '../../../shared/services/account.service';
 export class HeaderComponent implements OnInit {
   @Output() public sidenavToggle = new EventEmitter();
   showNavigation = true;
-  
+
   constructor(public accountService: AccountService) { }
 
   ngOnInit(): void {
-    this.accountService.userSubject.subscribe(res => {
-      this.setNavBar()
+    this.accountService.userSubject.subscribe(() => {
+      this.setNavBar();
     });
   }
 
@@ -22,7 +22,7 @@ export class HeaderComponent implements OnInit {
     const user = this.accountService.userValue;
     this.showNavigation = Object.keys(user).length === 0 ? false : true;
   }
-  
+
   public onToggleSidenav = () => {
     this.sidenavToggle.emit();
   }

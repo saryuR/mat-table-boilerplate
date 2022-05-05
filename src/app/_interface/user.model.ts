@@ -55,9 +55,8 @@ export interface userData {
     ModifiedBy: string;
     ModifiedTimestamp: string;
     DataStateFlag: string;
-    UserPrefix: string
+    UserPrefix: string;
   }
-
   
 export interface userViewProfile {
     Id: number;
@@ -87,19 +86,20 @@ export interface userViewProfile {
     DataStateFlag: string
 }
 
+
 export interface roles {
       Id: number;
-      Name: String;
+      Name: string;
 }
 
 export interface common {
   Id: number;
-  Name: String;
+  Name: string;
 }
 
 export interface Prefix {
   Id: number;
-  Prefix: String;
+  Prefix: string;
 }
 
 export interface extras {
@@ -107,5 +107,5 @@ export interface extras {
   localJobTitles: common[];
   localDepartment: common[];
   ReportsTo: common[];
+};
 
-}

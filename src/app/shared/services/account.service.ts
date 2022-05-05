@@ -18,11 +18,11 @@ export class AccountService {
         this.user = this.userSubject.asObservable();
     }
 
-    public login(username: string, password: string, grant_type: string): Observable<userData> {
-        let httpOptions = {
+    public login(username: string, password: string, grantType: string): Observable<userData> {
+        const httpOptions = {
             headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }),
         };
-        let body = `username=${username}&password=${password}&grant_type=${grant_type}`;
+        const body = `username=${username}&password=${password}&grant_type=${grantType}`;
         return this.http.post<userData>(`${environment.urlAddress}/token`, body, httpOptions)
             .pipe(map(user => {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -37,15 +37,16 @@ export class AccountService {
     }
 
     public getData = (AccountId: number, pageNumber: number, pageSize: number) => {
-        return this.http.get<userData[]>(`${environment.urlAddress}/api/UserAccount/GetAll?accountId=${AccountId}&sorted=true&pageNumber=${pageNumber}&pageSize=${pageSize}`);
+        return this.http.get<userData[]>(`${environment.urlAddress}/api/UserAccount/GetAll?
+        accountId=${AccountId}&sorted=true&pageNumber=${pageNumber}&pageSize=${pageSize}`);
     }
 
     public update(id: string, params: userData): Observable<any> {
-        return this.http.put(`${environment.urlAddress}/api/UserAccount/Update`, params)
+        return this.http.put(`${environment.urlAddress}/api/UserAccount/Update`, params);
     }
 
     register(params: any): Observable<any> {
-        return this.http.post(`${environment.urlAddress}/api/UserAccount/Create`, params)
+        return this.http.post(`${environment.urlAddress}/api/UserAccount/Create`, params);
     }
 
     sendInvitation(params: any): Observable<any> {
@@ -75,6 +76,4 @@ export class AccountService {
     public get userValue(): userData {
         return this.userSubject.value;
     }
-
-
 }
