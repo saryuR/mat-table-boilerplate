@@ -2,36 +2,30 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { forkJoin } from 'rxjs';
 import { AccountService } from '../../../shared/services/account.service';
 import { AlertService } from '../../../shared/services/alert.service';
-import { common, Prefix, roles, userData } from 'src/app/_interface/user.model';
+import { userData } from '../../../_interface/user.model';
 import { AbstractBaseClassComponent } from '../Abstract-base-class';
 
 
 @Component({ templateUrl: 'add-edit.component.html' })
 export class AddEditComponent extends AbstractBaseClassComponent implements OnInit {
     form: FormGroup;
+    selectedUser: userData;
     userId: string;
-    roleTypes: roles[];
     isAddMode: boolean;
     loading = false;
     submitted = false;
-    prefixs: Prefix[];
-    localJobTitles: common[];
-    localDepartment: common[];
-    reportsTo: common[];
-    adminRoleId = 3;
 
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
-        private accountService: AccountService,
+        public accountService: AccountService,
         private alertService: AlertService
     ) {
         super();
-     }
+    }
 
     ngOnInit(): void {
         this.initUserDetails();
@@ -51,10 +45,10 @@ export class AddEditComponent extends AbstractBaseClassComponent implements OnIn
         });
 
         if (!this.isAddMode) {
-
             this.accountService.getById(this.userId)
                 .pipe(first())
                 .subscribe((userDetails: userData) => {
+                    this.selectedUser = userDetails;
                     this.setUserDetails(userDetails);
                 });
         }
@@ -63,35 +57,13 @@ export class AddEditComponent extends AbstractBaseClassComponent implements OnIn
     setUserDetails(userDetails: userData): void {
         this.form.patchValue(userDetails);
         const userAccount = userDetails.Accounts[0];
-        this.f.Roles.setValue(userAccount.Roles);
-        // this.f.ReportsTo.setValue(this.getNames(userAccount.ReportsTo, 'Name'));
-        // this.f.JobTitles.setValue(this.getNames(userAccount.JobTitles, 'Name'));
-        // this.f.Departments.setValue(this.getNames(userAccount.Departments, 'Name'));
-        // this.f.Prefix.setValue(userDetails.UserPrefix);
-    }
-
-    getNames(data: any[], key: string): string {
-        const keys = [];
-        data.forEach(x => { keys.push(x[key]); });
-        console.log(keys, keys.join(','))
-        return keys.join(',');
-    }
-
-    initUserDetails() {
-        const Prefix$ = this.accountService.getUserPrefix();
-        const LocalJobTitles$ = this.accountService.getLocalJobTitles(this.loggedinUser.Accounts[0].AccountId);
-        const LocalDepartment$ = this.accountService.getLocalDepartment(this.loggedinUser.Accounts[0].AccountId);
-        const ReportsTo$ = this.accountService.getReportsTo(this.loggedinUser.Accounts[0].AccountId);
-        const roles$ = this.accountService.getRoles(this.loggedinUser.UserId, this.loggedinUser.Accounts[0].AccountId)
-
-        forkJoin({ Prefix$, LocalJobTitles$, LocalDepartment$, ReportsTo$, roles$ })
-            .subscribe(res => {
-                this.prefixs = res.Prefix$;
-                this.localJobTitles = res.LocalJobTitles$;
-                this.localDepartment = res.LocalDepartment$;
-                this.reportsTo = res.ReportsTo$;
-                this.roleTypes = res.roles$;
-            });
+        this.f.Prefix.setValue(userDetails.Prefix[0].Prefix);
+        this.f.ReportsTo.setValue(userAccount?.ReportsTo[0]?.Id);
+        this.f.JobTitleId.setValue(userAccount?.JobTitles[0]?.Id);
+        this.f.Departments.setValue(userAccount?.Departments[0]?.Id);
+        const selectedRoles = [];
+        userAccount.Roles.forEach(data => { selectedRoles.push(data.Id) });
+        this.f.Roles.setValue(selectedRoles);
     }
 
     // convenience getter for easy access to form fields
@@ -141,7 +113,11 @@ export class AddEditComponent extends AbstractBaseClassComponent implements OnIn
     }
 
     private updateUser(): void {
-        this.accountService.update(this.userId, this.form.value)
+        const userDeatils = this.form.value;
+        userDeatils.Id = this.selectedUser.Id;
+        userDeatils.UserId = this.selectedUser.UserId;
+        const payload = this.preparePayload(true, userDeatils);
+        this.accountService.update(this.userId, payload)
             .pipe(first())
             .subscribe({
                 next: () => {

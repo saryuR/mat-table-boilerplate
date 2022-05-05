@@ -6,27 +6,31 @@ import { MatPaginator } from '@angular/material/paginator';
 import { UsersService } from '../../../shared/services/users.service';
 import { userData } from '../../../_interface/user.model';
 import { users } from './users';
+import { AbstractBaseClassComponent } from '../Abstract-base-class';
+import { AlertService } from 'src/app/shared/services/alert.service';
+import { AccountService } from 'src/app/shared/services/account.service';
 
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss']
 })
-export class UserListComponent implements OnInit, AfterViewInit {
+export class UserListComponent extends AbstractBaseClassComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   public displayedColumns = ['firstName', 'lastName', 'email', 'walshrole', 'update', 'delete'];
   public dataSource = new MatTableDataSource<userData>();
-  public users: userData[] = users;
-  public isAdmin = false;
-  public adminRoleId = 3;
-
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  pageNumber = 0;
-  pageSize = 2;
   loading = false;
 
-  constructor(private route: ActivatedRoute, private router: Router, private usersService: UsersService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private usersService: UsersService,
+    public accountService: AccountService,
+    public alertService: AlertService) {
+    super();
+  }
 
   ngOnInit() {
     this.getAllUsers();
@@ -34,22 +38,11 @@ export class UserListComponent implements OnInit, AfterViewInit {
 
   public getAllUsers = () => {
     this.loading = true;
-    const currentLoggedInUser = this.getLoggedInUser();
-    this.isAdmin = this.isAccountAdmin(currentLoggedInUser.Accounts[0].Roles);
-    this.usersService.getData(currentLoggedInUser.Accounts[0].AccountId, this.pageNumber, this.pageSize)
+    this.usersService.getData(this.AccountId, this.pageNumber, this.pageSize)
       .subscribe((res: any) => {
         this.dataSource.data = res as userData[];
         this.loading = false;
       });
-  }
-
-  isAccountAdmin(roles) {
-    const admin = roles.find(x => x.Id === this.adminRoleId);
-    return admin ? true : false;
-  }
-
-  getLoggedInUser() {
-    return JSON.parse(localStorage.getItem('currentLoggedInUser'));
   }
 
   ngAfterViewInit(): void {
@@ -79,12 +72,16 @@ export class UserListComponent implements OnInit, AfterViewInit {
     this.router.navigate(['create-user'], { relativeTo: this.route });
   }
 
-  public markUserAsInActive = (element: userData) => {
-    const payload: any = element;
-    payload.Status = 'Active';
-    payload.AccountId = payload.Accounts[0].AccountId;
-    this.usersService.update('api/UserAccount/Update', payload).subscribe(response => {
-      console.log('updated');
+  public markUserAsInActive = (element: any) => {
+    element.Departments = element.Accounts[0].Departments[0].Id;
+    element.JobTitleId = element.Accounts[0].JobTitles[0].Id;
+    element.ReportsTo = element.Accounts[0].ReportsTo[0].Id;
+    element.Roles = [element.Accounts[0].Roles[0].Id];
+    element.Prefix = element.Prefix.length > 0 ? element.Prefix[0]?.Prefix : 'Mrs.';
+    let payload = this.preparePayload(true, element, true);
+    this.accountService.update(element.UserId, payload).subscribe(() => {
+      this.alertService.success('Update successful', { keepAfterRouteChange: true });
+      this.getAllUsers();
     });
   }
 

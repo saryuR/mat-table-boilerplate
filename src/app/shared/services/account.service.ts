@@ -42,19 +42,19 @@ export class AccountService {
         return this.http.get<userData>(`${environment.urlAddress}/api/UserAccount/GetByUserId?userid=${userid}`);
     }
 
-    update(id: string, params: userData) {
+    public update(id: string, params: userData) {
         
         return this.http.put(`${environment.urlAddress}/api/UserAccount/Update`, params)
             .pipe(map(x => {
                 // update stored user if the logged in user updated their own record
-                if (id === (this.userValue.Id).toString()) {
-                    // update local storage
-                    const user = { ...this.userValue, ...params };
-                    localStorage.setItem('user', JSON.stringify(user));
+                // if (id === (this.userValue.Id).toString()) {
+                //     // update local storage
+                //     const user = { ...this.userValue, ...params };
+                //     localStorage.setItem('user', JSON.stringify(user));
 
-                    // publish updated user to subscribers
-                    this.userSubject.next(user);
-                }
+                //     // publish updated user to subscribers
+                //     this.userSubject.next(user);
+                // }
                 return x;
             }));
     }

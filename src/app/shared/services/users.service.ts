@@ -10,7 +10,7 @@ export class UsersService {
  
   constructor(private http: HttpClient) { }
  
-  public getData = (AccountId: string, pageNumber: number, pageSize: number) => {
+  public getData = (AccountId: number, pageNumber: number, pageSize: number) => {
     return this.http.get<userData[]>(`${environment.urlAddress}/api/UserAccount/GetAll?accountId=${AccountId}&sorted=true&pageNumber=${pageNumber}&pageSize=${pageSize}`);
    }
  
