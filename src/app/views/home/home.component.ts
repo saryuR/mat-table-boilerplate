@@ -9,22 +9,16 @@ import { AbstractBaseClassComponent } from '../users/Abstract-base-class';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent extends AbstractBaseClassComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit {
   public userData: USERDATA;
-  constructor(public accountService: AccountService) {
-    super();
-  }
+  constructor(public accountService: AccountService) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.accountService.getById(this.accountService.userSubject.value.UserId)
-      .pipe(takeUntil(this.destroyed$)).subscribe(response => {
+      .subscribe(response => {
         this.userData = response;
         localStorage.setItem('currentLoggedInUser', JSON.stringify(response));
       });
-  }
-
-  ngOnDestroy() {
-    super.ngOnDestroy();
   }
 
 }

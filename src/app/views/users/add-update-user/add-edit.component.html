@@ -45,7 +45,7 @@
             <label for="PhoneNumber">
                 Phone Number
             </label>
-            <input type="number" formControlName="PhoneNumber" class="form-control"
+            <input type="text" formControlName="PhoneNumber" class="form-control"
                 [ngClass]="{ 'is-invalid': submitted && f.PhoneNumber.errors }" />
             <div *ngIf="submitted && f.PhoneNumber.errors" class="invalid-feedback">
                 <div *ngIf="f.PhoneNumber.errors.required">Phone Number is required</div>

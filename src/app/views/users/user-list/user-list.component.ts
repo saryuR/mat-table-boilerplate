@@ -36,6 +36,7 @@ export class UserListComponent extends AbstractBaseClassComponent implements OnI
 
   public getAllUsers = () => {
     this.loading = true;
+    this.dataSource.data = [];
     this.accountService.getData(this.AccountId, this.pageNumber, this.pageSize)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((res: any) => {
