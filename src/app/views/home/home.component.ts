@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
-import { userData } from '../../_interface/user.model';
-import { AccountService } from 'src/app/shared/services/account.service';
+import { USERDATA } from '../../_interface/user.model';
+import { AccountService } from '../../shared/services/account.service';
 import { AbstractBaseClassComponent } from '../users/Abstract-base-class';
 
 @Component({
@@ -10,7 +10,7 @@ import { AbstractBaseClassComponent } from '../users/Abstract-base-class';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent extends AbstractBaseClassComponent implements OnInit, OnDestroy {
-  public userData: userData;
+  public userData: USERDATA;
   constructor(public accountService: AccountService) {
     super();
   }

@@ -2,9 +2,8 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { forkJoin, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+import { COMMON, PREFIX, ROLES, USERDATA } from '../../_interface/user.model';
 import { AccountService } from '../../shared/services/account.service';
-import { common, Prefix, roles, userData } from '../../_interface/user.model';
-
 
 @Injectable()
 export abstract class AbstractBaseClassComponent implements OnDestroy {
@@ -13,14 +12,14 @@ export abstract class AbstractBaseClassComponent implements OnDestroy {
   pageNumber = 0;
   pageSize = 2;
   adminRoleId = 3;
-  loggedinUser: userData;
+  loggedinUser: USERDATA;
   AccountId: number;
   isAdmin = false;
-  roleTypes: roles[];
-  prefixs: Prefix[];
-  localJobTitles: common[];
-  localDepartment: common[];
-  reportsTo: common[];
+  roleTypes: ROLES[];
+  prefixs: PREFIX[];
+  localJobTitles: COMMON[];
+  localDepartment: COMMON[];
+  reportsTo: COMMON[];
   accountService: AccountService;
 
   constructor() {
@@ -29,13 +28,13 @@ export abstract class AbstractBaseClassComponent implements OnDestroy {
     this.isAdmin = this.isAccountAdmin(this.loggedinUser.Accounts[0].Roles);
   }
 
-  public isAccountAdmin(roles: common[]): boolean {
+  public isAccountAdmin(roles: COMMON[]): boolean {
     const admin = roles.find(x => x.Id === this.adminRoleId);
     return admin ? true : false;
   }
 
 
-  public getLoggedInUser(): userData {
+  public getLoggedInUser(): USERDATA {
     return JSON.parse(localStorage.getItem('currentLoggedInUser'));
   }
 
@@ -87,7 +86,7 @@ export abstract class AbstractBaseClassComponent implements OnDestroy {
       });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

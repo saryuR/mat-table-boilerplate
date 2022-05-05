@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first, takeUntil } from 'rxjs/operators';
 
-import { userData } from '../../../_interface/user.model';
+import { USERDATA } from '../../../_interface/user.model';
 import { AccountService } from '../../../shared/services/account.service';
 import { AlertService } from '../../../shared/services/alert.service';
 import { AbstractBaseClassComponent } from '../Abstract-base-class';
@@ -11,7 +11,7 @@ import { AbstractBaseClassComponent } from '../Abstract-base-class';
 @Component({ templateUrl: 'add-edit.component.html' })
 export class AddEditComponent extends AbstractBaseClassComponent implements OnInit {
     form: FormGroup;
-    selectedUser: userData;
+    selectedUser: USERDATA;
     userId: string;
     isAddMode: boolean;
     loading = false;
@@ -29,7 +29,7 @@ export class AddEditComponent extends AbstractBaseClassComponent implements OnIn
 
     ngOnInit(): void {
         this.initUserDetails();
-        this.userId = this.route.snapshot.params['id'];
+        this.userId = this.route.snapshot?.params?.id;
         this.isAddMode = !this.userId;
         this.form = this.formBuilder.group({
             Prefix: ['', Validators.required],
@@ -48,14 +48,14 @@ export class AddEditComponent extends AbstractBaseClassComponent implements OnIn
             this.accountService.getById(this.userId)
                 .pipe(takeUntil(this.destroyed$))
                 .pipe(first())
-                .subscribe((userDetails: userData) => {
+                .subscribe((userDetails: USERDATA) => {
                     this.selectedUser = userDetails;
                     this.setUserDetails(userDetails);
                 });
         }
     }
 
-    setUserDetails(userDetails: userData): void {
+    setUserDetails(userDetails: USERDATA): void {
         this.form.patchValue(userDetails);
         const userAccount = userDetails.Accounts[0];
         this.f.Prefix.setValue(userDetails.Prefix[0].Prefix);

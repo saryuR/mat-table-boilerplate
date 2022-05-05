@@ -1,4 +1,4 @@
-export interface userData {
+export interface USERDATA {
   Id: number;
   UserId: string;
   Email: string;
@@ -57,7 +57,7 @@ export interface userData {
   DataStateFlag: string;
   UserPrefix: string;
 }
-export interface userViewProfile {
+export interface USERVIEWPROFILE {
   Id: number;
   UserId: string;
   AccountId: number;
@@ -86,26 +86,20 @@ export interface userViewProfile {
 }
 
 
-export interface roles {
+export interface ROLES {
   Id: number;
   Name: string;
 }
 
-export interface common {
+export interface COMMON {
   Id: number;
   Name: string;
 }
 
-export interface Prefix {
+export interface PREFIX {
   Id: number;
   Prefix: string;
 }
 
-export interface extras {
-  prefixs: Prefix[];
-  localJobTitles: common[];
-  localDepartment: common[];
-  ReportsTo: common[];
-}
 
 

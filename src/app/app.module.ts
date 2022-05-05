@@ -4,12 +4,13 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { AppComponent } from './app.component';
 import { ErrorInterceptor, JwtInterceptor } from './_helpers';
 import { MaterialModule } from './shared/material/material.module';
-import { LayoutComponent } from './view-builders/layout/layout.component';
-import { HomeComponent } from './views/home/home.component';
 import { RoutingModule } from './view-builders/routing/routing.module';
+
+import { AppComponent } from './app.component';
+import { HomeComponent } from './views/home/home.component';
+import { LayoutComponent } from './view-builders/layout/layout.component';
 import { HeaderComponent } from './view-builders/navigation/header/header.component';
 import { SidenavListComponent } from './view-builders/navigation/sidenav-list/sidenav-list.component';
 import { AlertComponent } from './shared/alert/alert.component';

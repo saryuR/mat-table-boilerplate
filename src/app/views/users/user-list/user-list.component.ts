@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 
-import { userData } from '../../../_interface/user.model';
+import { USERDATA } from '../../../_interface/user.model';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { AccountService } from 'src/app/shared/services/account.service';
 import { AbstractBaseClassComponent } from '../Abstract-base-class';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-list',
@@ -19,7 +19,7 @@ export class UserListComponent extends AbstractBaseClassComponent implements OnI
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  public dataSource = new MatTableDataSource<userData>();
+  public dataSource = new MatTableDataSource<USERDATA>();
   loading = false;
 
   constructor(
@@ -39,7 +39,7 @@ export class UserListComponent extends AbstractBaseClassComponent implements OnI
     this.accountService.getData(this.AccountId, this.pageNumber, this.pageSize)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((res: any) => {
-        this.dataSource.data = res as userData[];
+        this.dataSource.data = res as USERDATA[];
         this.loading = false;
       });
   }
@@ -56,14 +56,13 @@ export class UserListComponent extends AbstractBaseClassComponent implements OnI
           (event.direction === 'desc' ? b[event.active] - a[event.active] : a[event.active] - b[event.active]);
       }
     );
-
   }
 
   public doFilter = (value: string) => {
     this.dataSource.filter = value.trim().toLocaleLowerCase();
   }
 
-  public redirectToUpdate = (element: userData) => {
+  public redirectToUpdate = (element: USERDATA) => {
     this.router.navigate(['edit', element.UserId], { relativeTo: this.route });
   }
 

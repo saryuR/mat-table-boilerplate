@@ -4,7 +4,6 @@
 
 export const environment = {
   production: false,
-  // urlAddress: 'http://localhost:4200',
   urlAddress: 'https://walshapix.azurewebsites.net'
 };
 
