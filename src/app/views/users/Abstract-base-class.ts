@@ -8,7 +8,7 @@ import { AccountService } from '../../shared/services/account.service';
 @Injectable()
 export abstract class AbstractBaseClassComponent implements OnDestroy {
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  public displayedColumns = ['firstName', 'lastName', 'email', 'walshrole', 'update', 'action'];
+  public displayedColumns = ['FirstName', 'LastName', 'Email', 'walshrole', 'update', 'action'];
   pageNumber = 0;
   pageSize = 2;
   adminRoleId = 3;
