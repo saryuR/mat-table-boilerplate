@@ -27,8 +27,10 @@
       <th mat-header-cell *matHeaderCellDef> Walsh Role </th>
       <td mat-cell *matCellDef="let element">
         <ng-container *ngFor="let account of element.Accounts">
-          <ng-container *ngFor="let role of account.Roles">
-            {{role.Name}} &nbsp;&nbsp;
+          <ng-container *ngIf="account.AccountId === AccountId">
+            <ng-container *ngFor="let role of account.Roles">
+              <button mat-raised-button color="accent" [disableRipple]="true">{{role.Name}} </button>&nbsp;&nbsp;
+            </ng-container>
           </ng-container>
         </ng-container>
       </td>

@@ -4,8 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { UsersService } from '../../../shared/services/users.service';
-import { userData } from '../../../_interface/user.model';
-import { users } from './users';
+import { roles, userData } from '../../../_interface/user.model';
 import { AbstractBaseClassComponent } from '../Abstract-base-class';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { AccountService } from 'src/app/shared/services/account.service';
@@ -19,7 +18,6 @@ export class UserListComponent extends AbstractBaseClassComponent implements OnI
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  public displayedColumns = ['firstName', 'lastName', 'email', 'walshrole', 'update', 'delete'];
   public dataSource = new MatTableDataSource<userData>();
   loading = false;
 
@@ -66,7 +64,6 @@ export class UserListComponent extends AbstractBaseClassComponent implements OnI
   public redirectToUpdate = (element: userData) => {
     this.router.navigate(['edit', element.UserId], { relativeTo: this.route });
   }
-
 
   public addUser() {
     this.router.navigate(['create-user'], { relativeTo: this.route });

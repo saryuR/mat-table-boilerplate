@@ -6,6 +6,7 @@ import { common, Prefix, roles, userData } from 'src/app/_interface/user.model';
 
 @Injectable()
 export abstract class AbstractBaseClassComponent {
+  public displayedColumns = ['firstName', 'lastName', 'email', 'walshrole', 'update', 'delete'];
   pageNumber = 0;
   pageSize = 2;
   adminRoleId = 3;
