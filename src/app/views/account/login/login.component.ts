@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
+
 import { AccountService } from '../../../shared/services/account.service';
 import { AlertService } from '../../../shared/services/alert.service';
-
 
 @Component({ templateUrl: 'login.component.html' })
 export class LoginComponent implements OnInit {
@@ -13,9 +13,9 @@ export class LoginComponent implements OnInit {
     submitted = false;
 
     constructor(
-        private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
+        private formBuilder: FormBuilder,
         private accountService: AccountService,
         private alertService: AlertService
     ) { }
@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
         this.accountService.login(this.f.username.value, this.f.password.value, this.f.grant_type.value)
             .pipe(first())
             .subscribe({
-                next: (response) => {
+                next: () => {
                     // get return url from query parameters or default to home page
                     const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
                     this.router.navigateByUrl(returnUrl);

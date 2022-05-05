@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
+import { first, takeUntil } from 'rxjs/operators';
+
+import { userData } from '../../../_interface/user.model';
 import { AccountService } from '../../../shared/services/account.service';
 import { AlertService } from '../../../shared/services/alert.service';
-import { userData } from '../../../_interface/user.model';
 import { AbstractBaseClassComponent } from '../Abstract-base-class';
-
 
 @Component({ templateUrl: 'add-edit.component.html' })
 export class AddEditComponent extends AbstractBaseClassComponent implements OnInit {
@@ -46,6 +46,7 @@ export class AddEditComponent extends AbstractBaseClassComponent implements OnIn
 
         if (!this.isAddMode) {
             this.accountService.getById(this.userId)
+                .pipe(takeUntil(this.destroyed$))
                 .pipe(first())
                 .subscribe((userDetails: userData) => {
                     this.selectedUser = userDetails;
@@ -92,15 +93,16 @@ export class AddEditComponent extends AbstractBaseClassComponent implements OnIn
         const payload = this.preparePayload(false, this.form.value);
         this.accountService.register(payload)
             .pipe(first())
+            .pipe(takeUntil(this.destroyed$))
             .subscribe({
-                next: (res: any) => {
+                next: () => {
                     if (this.form.value.sendInvitation) {
                         const config = {
                             UserId: this.loggedinUser.UserId,
                             Email: this.form.value.Email,
                             AccountId: this.AccountId
                         }
-                        this.accountService.sendInvitation(config).subscribe(() => { });
+                        this.accountService.sendInvitation(config).pipe(takeUntil(this.destroyed$)).subscribe(() => { });
                     }
                     this.alertService.success('User added successfully', { keepAfterRouteChange: true });
                     this.router.navigate(['../'], { relativeTo: this.route });
@@ -118,6 +120,7 @@ export class AddEditComponent extends AbstractBaseClassComponent implements OnIn
         userDeatils.UserId = this.selectedUser.UserId;
         const payload = this.preparePayload(true, userDeatils);
         this.accountService.update(this.userId, payload)
+            .pipe(takeUntil(this.destroyed$))
             .pipe(first())
             .subscribe({
                 next: () => {

@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { common, Prefix, userData } from 'src/app/_interface/user.model';
+import { common, Prefix, userData } from '../../_interface/user.model';
 import { environment } from 'src/environments/environment';
 
 
@@ -13,18 +12,13 @@ export class AccountService {
     public user: Observable<userData>;
 
     constructor(
-        private router: Router,
         private http: HttpClient
     ) {
         this.userSubject = new BehaviorSubject<userData>(JSON.parse(localStorage.getItem('user') || '{}'));
         this.user = this.userSubject.asObservable();
     }
 
-    public get userValue(): userData {
-        return this.userSubject.value;
-    }
-    
-    login(username: string, password: string, grant_type: string) {
+    public login(username: string, password: string, grant_type: string): Observable<userData> {
         let httpOptions = {
             headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }),
         };
@@ -38,73 +32,49 @@ export class AccountService {
             }));
     }
 
-    getById(userid: string) {
+    public getById(userid: string): Observable<userData> {
         return this.http.get<userData>(`${environment.urlAddress}/api/UserAccount/GetByUserId?userid=${userid}`);
     }
 
-    public update(id: string, params: userData) {
-        
+    public getData = (AccountId: number, pageNumber: number, pageSize: number) => {
+        return this.http.get<userData[]>(`${environment.urlAddress}/api/UserAccount/GetAll?accountId=${AccountId}&sorted=true&pageNumber=${pageNumber}&pageSize=${pageSize}`);
+    }
+
+    public update(id: string, params: userData): Observable<any> {
         return this.http.put(`${environment.urlAddress}/api/UserAccount/Update`, params)
-            .pipe(map(x => {
-                // update stored user if the logged in user updated their own record
-                // if (id === (this.userValue.Id).toString()) {
-                //     // update local storage
-                //     const user = { ...this.userValue, ...params };
-                //     localStorage.setItem('user', JSON.stringify(user));
-
-                //     // publish updated user to subscribers
-                //     this.userSubject.next(user);
-                // }
-                return x;
-            }));
     }
 
-    register(params: any) {
+    register(params: any): Observable<any> {
         return this.http.post(`${environment.urlAddress}/api/UserAccount/Create`, params)
-            .pipe(map(x => {
-                return x;
-            }));
     }
 
-    sendInvitation(params: any) {
-        return this.http.post(`${environment.urlAddress}/api/UserAccount/SendInvitation`, params)
-            .pipe(map(x => {
-                return x;
-            }));
-        
+    sendInvitation(params: any): Observable<any> {
+        return this.http.post(`${environment.urlAddress}/api/UserAccount/SendInvitation`, params);
     }
 
-    delete(id: string) {
-        // return this.http.delete(`${environment.urlAddress}/users/${id}`)
-        //     .pipe(map(x => {
-        //         // auto logout if the logged in user deleted their own record
-        //         if (id == this.userValue.id) {
-        //             // this.logout();
-        //         }
-        //         return x;
-        //     }));
-    }
-
-
-    
-    getUserPrefix() {
+    public getUserPrefix(): Observable<Prefix[]> {
         return this.http.get<Prefix[]>(`${environment.urlAddress}/api/UserAccount/GetUserPrefix`);
     }
 
-    getLocalJobTitles(accountId: number) {
+    public getLocalJobTitles(accountId: number): Observable<common[]> {
         return this.http.get<common[]>(`${environment.urlAddress}/api/LocalJobTitles?accountId=${accountId}&sorted=true`);
     }
 
-    getLocalDepartment(accountId: number) {
+    public getLocalDepartment(accountId: number): Observable<common[]> {
         return this.http.get<common[]>(`${environment.urlAddress}/api/LocalDepartment?accountId=${accountId}&sorted=false`);
     }
 
-    getReportsTo(accountId: number) {
+    public getReportsTo(accountId: number): Observable<common[]> {
         return this.http.get<common[]>(`${environment.urlAddress}/api/localJobTitles/reportsTo?accountId=${accountId}`);
     }
 
-    getRoles(userid: string, accountId: number) {
+    public getRoles(userid: string, accountId: number): Observable<common[]> {
         return this.http.get<common[]>(`${environment.urlAddress}/api/Roles?userId=${userid}&accountId=${accountId}`);
     }
+
+    public get userValue(): userData {
+        return this.userSubject.value;
+    }
+
 
 }

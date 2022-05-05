@@ -3,11 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { UsersService } from '../../../shared/services/users.service';
-import { roles, userData } from '../../../_interface/user.model';
-import { AbstractBaseClassComponent } from '../Abstract-base-class';
+
+import { userData } from '../../../_interface/user.model';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { AccountService } from 'src/app/shared/services/account.service';
+import { AbstractBaseClassComponent } from '../Abstract-base-class';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-list',
@@ -24,7 +25,6 @@ export class UserListComponent extends AbstractBaseClassComponent implements OnI
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private usersService: UsersService,
     public accountService: AccountService,
     public alertService: AlertService) {
     super();
@@ -36,7 +36,8 @@ export class UserListComponent extends AbstractBaseClassComponent implements OnI
 
   public getAllUsers = () => {
     this.loading = true;
-    this.usersService.getData(this.AccountId, this.pageNumber, this.pageSize)
+    this.accountService.getData(this.AccountId, this.pageNumber, this.pageSize)
+    .pipe(takeUntil(this.destroyed$))
       .subscribe((res: any) => {
         this.dataSource.data = res as userData[];
         this.loading = false;

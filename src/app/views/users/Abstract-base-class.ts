@@ -1,11 +1,14 @@
-import { Injectable } from '@angular/core';
-import { forkJoin } from 'rxjs';
-import { AccountService } from 'src/app/shared/services/account.service';
-import { common, Prefix, roles, userData } from 'src/app/_interface/user.model';
+import { Injectable, OnDestroy } from '@angular/core';
+import { forkJoin, ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { AccountService } from '../../shared/services/account.service';
+import { common, Prefix, roles, userData } from '../../_interface/user.model';
 
 
 @Injectable()
-export abstract class AbstractBaseClassComponent {
+export abstract class AbstractBaseClassComponent implements OnDestroy{
+  public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public displayedColumns = ['firstName', 'lastName', 'email', 'walshrole', 'update', 'delete'];
   pageNumber = 0;
   pageSize = 2;
@@ -26,13 +29,13 @@ export abstract class AbstractBaseClassComponent {
     this.isAdmin = this.isAccountAdmin(this.loggedinUser.Accounts[0].Roles);
   }
 
-  isAccountAdmin(roles): boolean {
+  public isAccountAdmin(roles): boolean {
     const admin = roles.find(x => x.Id === this.adminRoleId);
     return admin ? true : false;
   }
 
 
-  getLoggedInUser() {
+  public getLoggedInUser(): userData {
     return JSON.parse(localStorage.getItem('currentLoggedInUser'));
   }
 
@@ -66,7 +69,7 @@ export abstract class AbstractBaseClassComponent {
     return payload;
   }
 
-  initUserDetails() {
+  public initUserDetails(): void {
     const Prefix$ = this.accountService.getUserPrefix();
     const LocalJobTitles$ = this.accountService.getLocalJobTitles(this.AccountId);
     const LocalDepartment$ = this.accountService.getLocalDepartment(this.AccountId);
@@ -74,6 +77,7 @@ export abstract class AbstractBaseClassComponent {
     const roles$ = this.accountService.getRoles(this.loggedinUser.UserId, this.AccountId)
 
     forkJoin({ Prefix$, LocalJobTitles$, LocalDepartment$, ReportsTo$, roles$ })
+      .pipe(takeUntil(this.destroyed$))
       .subscribe(res => {
         this.prefixs = res.Prefix$;
         this.localJobTitles = res.LocalJobTitles$;
@@ -82,5 +86,11 @@ export abstract class AbstractBaseClassComponent {
         this.roleTypes = res.roles$;
       });
   }
+
+  ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
+
 
 }
