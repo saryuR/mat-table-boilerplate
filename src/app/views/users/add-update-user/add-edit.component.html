@@ -5,8 +5,9 @@
 
         <div class="form-group col">
             <label for="Prefix">Prefix</label>
-            <mat-select placeholder="Select Prefix" formControlName="Prefix">
-                <mat-option *ngFor="let type of prefixs" [value]="type.Id">
+            <mat-select placeholder="Select Prefix" formControlName="Prefix"
+            [ngClass]="{ 'is-invalid': submitted && f.Prefix.errors }">
+                <mat-option *ngFor="let type of prefixs" [value]="type.Prefix">
                     {{type.Prefix}}
                 </mat-option>
             </mat-select>
@@ -70,13 +71,14 @@
     <div class="form-row">
         <div class="form-group col">
             <label for="JobTitles">Job Title</label>
-            <mat-select placeholder="Select Job Title" formControlName="JobTitleId">
+            <mat-select placeholder="Select Job Title" formControlName="JobTitleId"
+            [ngClass]="{ 'is-invalid': submitted && f.JobTitleId.errors }">
                 <mat-option *ngFor="let type of localJobTitles" [value]="type.Id">
                     {{type.Name}}
                 </mat-option>
             </mat-select>
-            <div *ngIf="submitted && f.JobTitles.errors" class="invalid-feedback">
-                <div *ngIf="f.JobTitles.errors.required">JobTitles is required</div>
+            <div *ngIf="submitted && f.JobTitleId.errors" class="invalid-feedback">
+                <div *ngIf="f.JobTitleId.errors.required">JobTitles is required</div>
             </div>
         </div>
         <div class="form-group col">

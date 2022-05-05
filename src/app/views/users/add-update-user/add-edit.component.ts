@@ -2,14 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
 import { AccountService } from '../../../shared/services/account.service';
 import { AlertService } from '../../../shared/services/alert.service';
-import { common, extras, Prefix, roles, userData } from 'src/app/_interface/user.model';
-import { forkJoin } from 'rxjs';
+import { common, Prefix, roles, userData } from 'src/app/_interface/user.model';
+import { AbstractBaseClassComponent } from '../Abstract-base-class';
 
 
 @Component({ templateUrl: 'add-edit.component.html' })
-export class AddEditComponent implements OnInit {
+export class AddEditComponent extends AbstractBaseClassComponent implements OnInit {
     form: FormGroup;
     userId: string;
     roleTypes: roles[];
@@ -20,6 +21,7 @@ export class AddEditComponent implements OnInit {
     localJobTitles: common[];
     localDepartment: common[];
     reportsTo: common[];
+    adminRoleId = 3;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -27,7 +29,9 @@ export class AddEditComponent implements OnInit {
         private router: Router,
         private accountService: AccountService,
         private alertService: AlertService
-    ) { }
+    ) {
+        super();
+     }
 
     ngOnInit(): void {
         this.initUserDetails();
@@ -73,19 +77,14 @@ export class AddEditComponent implements OnInit {
         return keys.join(',');
     }
 
-    getLoggedInUser() {
-        return JSON.parse(localStorage.getItem('currentLoggedInUser'));
-    }
-
     initUserDetails() {
-        const loggedinUser = this.getLoggedInUser();
         const Prefix$ = this.accountService.getUserPrefix();
-        const LocalJobTitles$ = this.accountService.getLocalJobTitles(loggedinUser.Accounts[0].AccountId);
-        const LocalDepartment$ = this.accountService.getLocalDepartment(loggedinUser.Accounts[0].AccountId);
-        const ReportsTo$ = this.accountService.getReportsTo(loggedinUser.Accounts[0].AccountId);
-        const roles$ = this.accountService.getRoles(loggedinUser.UserId, loggedinUser.Accounts[0].AccountId)
+        const LocalJobTitles$ = this.accountService.getLocalJobTitles(this.loggedinUser.Accounts[0].AccountId);
+        const LocalDepartment$ = this.accountService.getLocalDepartment(this.loggedinUser.Accounts[0].AccountId);
+        const ReportsTo$ = this.accountService.getReportsTo(this.loggedinUser.Accounts[0].AccountId);
+        const roles$ = this.accountService.getRoles(this.loggedinUser.UserId, this.loggedinUser.Accounts[0].AccountId)
 
-        forkJoin({Prefix$, LocalJobTitles$, LocalDepartment$, ReportsTo$, roles$})
+        forkJoin({ Prefix$, LocalJobTitles$, LocalDepartment$, ReportsTo$, roles$ })
             .subscribe(res => {
                 this.prefixs = res.Prefix$;
                 this.localJobTitles = res.LocalJobTitles$;
@@ -118,15 +117,16 @@ export class AddEditComponent implements OnInit {
     }
 
     private createUser(): void {
-        this.accountService.register(this.form.value)
+        const payload = this.preparePayload(false, this.form.value);
+        this.accountService.register(payload)
             .pipe(first())
             .subscribe({
                 next: (res: any) => {
                     if (this.form.value.sendInvitation) {
                         const config = {
-                            UserId: res.UserId,
-                            Email: res.Email,
-                            AccountId: res.AccountId
+                            UserId: this.loggedinUser.UserId,
+                            Email: this.form.value.Email,
+                            AccountId: this.AccountId
                         }
                         this.accountService.sendInvitation(config).subscribe(() => { });
                     }
@@ -154,4 +154,5 @@ export class AddEditComponent implements OnInit {
                 }
             });
     }
+
 }
