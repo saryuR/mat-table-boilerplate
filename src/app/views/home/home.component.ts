@@ -1,24 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { userData } from '../../_interface/user.model';
 import { AccountService } from 'src/app/shared/services/account.service';
-import { userData } from 'src/app/_interface/user.model';
+import { AbstractBaseClassComponent } from '../users/Abstract-base-class';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent extends AbstractBaseClassComponent implements OnInit, OnDestroy {
   public userData: userData;
-  constructor(public accountService: AccountService) { }
+  constructor(public accountService: AccountService) {
+    super();
+  }
 
   ngOnInit(): void {
-    this.accountService.getById(this.accountService.userSubject.value.UserId).subscribe(response => {
-      this.userData = response;
-      localStorage.setItem('currentLoggedInUser', JSON.stringify(response));
-    });
+    this.accountService.getById(this.accountService.userSubject.value.UserId)
+      .pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.userData = response;
+        localStorage.setItem('currentLoggedInUser', JSON.stringify(response));
+      });
   }
 
-  public executeSelectedChange = (event) => {
-    console.log(event);
+  ngOnDestroy() {
+    super.ngOnDestroy();
   }
+
 }

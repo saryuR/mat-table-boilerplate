@@ -37,7 +37,7 @@ export class AlertComponent implements OnInit, OnDestroy {
                 if (alert.autoClose) {
                     setTimeout(() => this.removeAlert(alert), 3000);
                 }
-           });
+            });
 
         // clear alerts on location change
         this.routeSubscription = this.router.events.subscribe(event => {
@@ -55,7 +55,7 @@ export class AlertComponent implements OnInit, OnDestroy {
 
     removeAlert(alert: Alert) {
         // check if already removed to prevent error on auto close
-        if (!this.alerts.includes(alert)) return;
+        if (!this.alerts.includes(alert)) { return; }
 
         if (this.fade) {
             // fade out alert
@@ -75,7 +75,7 @@ export class AlertComponent implements OnInit, OnDestroy {
         if (!alert) { return; }
 
         const classes = ['alert', 'alert-dismissable', 'mt-4', 'container'];
-                
+
         const alertTypeClass = {
             [AlertType.Success]: 'alert alert-success',
             [AlertType.Error]: 'alert alert-danger',

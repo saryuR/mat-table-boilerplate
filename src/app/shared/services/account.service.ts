@@ -37,8 +37,7 @@ export class AccountService {
     }
 
     public getData = (AccountId: number, pageNumber: number, pageSize: number) => {
-        return this.http.get<userData[]>(`${environment.urlAddress}/api/UserAccount/GetAll?
-        accountId=${AccountId}&sorted=true&pageNumber=${pageNumber}&pageSize=${pageSize}`);
+        return this.http.get<userData[]>(`${environment.urlAddress}/api/UserAccount/GetAll?accountId=${AccountId}&sorted=true&pageNumber=${pageNumber}&pageSize=${pageSize}`);
     }
 
     public update(id: string, params: userData): Observable<any> {
