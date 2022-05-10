@@ -12,7 +12,7 @@ import { AbstractBaseClassComponent } from '../Abstract-base-class';
 export class AddEditComponent extends AbstractBaseClassComponent implements OnInit {
     form: FormGroup;
     selectedUser: USERDATA;
-    userId: string;
+    userId: number;
     isAddMode: boolean;
     loading = false;
     submitted = false;
@@ -28,43 +28,24 @@ export class AddEditComponent extends AbstractBaseClassComponent implements OnIn
     }
 
     ngOnInit(): void {
-        this.initUserDetails();
         this.userId = this.route.snapshot?.params?.id;
         this.isAddMode = !this.userId;
         this.form = this.formBuilder.group({
-            Prefix: ['', Validators.required],
-            FirstName: ['', Validators.required],
-            LastName: ['', Validators.required],
-            Email: ['', [Validators.required, Validators.email]],
-            PhoneNumber: ['', Validators.required],
-            Departments: ['', Validators.required],
-            JobTitleId: ['', Validators.required],
-            ReportsTo: ['', Validators.required],
-            Roles: ['', Validators.required],
-            sendInvitation: [false]
+            id: ['', Validators.required],
+            name: ['', Validators.required],
+            age: ['', Validators.required],
+            email: ['', [Validators.required, Validators.email]],
+            work: ['', Validators.required],
+            address: ['', Validators.required],
+            city: ['', Validators.required],
+            enable: ['', Validators.required],
         });
 
-        // if (!this.isAddMode) {
-        //     this.accountService.getById(this.userId)
-        //         .pipe(takeUntil(this.destroyed$))
-        //         .pipe(first())
-        //         .subscribe((userDetails: USERDATA) => {
-        //             this.selectedUser = userDetails;
-        //             this.setUserDetails(userDetails);
-        //         });
-        // }
-    }
-
-    setUserDetails(userDetails: USERDATA): void {
-        this.form.patchValue(userDetails);
-        // const userAccount = userDetails.Accounts[0];
-        // this.f.Prefix.setValue(userDetails.Prefix[0].Prefix);
-        // this.f.ReportsTo.setValue(userAccount?.ReportsTo[0]?.Id);
-        // this.f.JobTitleId.setValue(userAccount?.JobTitles[0]?.Id);
-        // this.f.Departments.setValue(userAccount?.Departments[0]?.Id);
-        // const selectedRoles = [];
-        // userAccount.Roles.forEach(data => { selectedRoles.push(data.Id); });
-        // this.f.Roles.setValue(selectedRoles);
+        if (!this.isAddMode) {
+            const users = this.accountService.getusers;
+            this.selectedUser = users.find(user => user.id === Number(this.userId));
+            this.form.patchValue(this.selectedUser);
+        }
     }
 
     // convenience getter for easy access to form fields
@@ -96,14 +77,6 @@ export class AddEditComponent extends AbstractBaseClassComponent implements OnIn
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
                 next: () => {
-                    if (this.form.value.sendInvitation) {
-                        const config = {
-                            // UserId: this.loggedinUser.UserId,
-                            Email: this.form.value.Email,
-                            AccountId: this.AccountId
-                        };
-                        this.accountService.sendInvitation(config).pipe(takeUntil(this.destroyed$)).subscribe(() => { });
-                    }
                     this.alertService.success('User added successfully', { keepAfterRouteChange: true });
                     this.router.navigate(['../'], { relativeTo: this.route });
                 },
@@ -117,7 +90,6 @@ export class AddEditComponent extends AbstractBaseClassComponent implements OnIn
     private updateUser(): void {
         const userDeatils = this.form.value;
         userDeatils.Id = this.selectedUser.id;
-        // userDeatils.UserId = this.selectedUser.UserId;
         const payload = this.preparePayload(true, userDeatils);
         this.accountService.update(this.userId, payload)
             .pipe(takeUntil(this.destroyed$))

@@ -9,12 +9,14 @@ import { environment } from 'src/environments/environment';
 @Injectable({ providedIn: 'root' })
 export class AccountService {
     public userSubject: BehaviorSubject<USERDATA>;
+    public userListSubject: BehaviorSubject<USERDATA[]>;
     public user: Observable<USERDATA>;
 
     constructor(
         private http: HttpClient
     ) {
         this.userSubject = new BehaviorSubject<USERDATA>(JSON.parse(localStorage.getItem('user') || '{}'));
+        this.userListSubject = new BehaviorSubject<USERDATA[]>(JSON.parse(localStorage.getItem('users') || '[]'));
         this.user = this.userSubject.asObservable();
     }
 
@@ -40,7 +42,7 @@ export class AccountService {
         return this.http.get<USERDATA[]>(`${environment.urlAddress}/api/UserAccount/GetAll?accountId=${AccountId}&sorted=true&pageNumber=${pageNumber}&pageSize=${pageSize}`);
     }
 
-    public update(id: string, params: USERDATA): Observable<any> {
+    public update(id: number, params: USERDATA): Observable<any> {
         return this.http.put(`${environment.urlAddress}/api/UserAccount/Update`, params);
     }
 
@@ -75,4 +77,9 @@ export class AccountService {
     public get userValue(): USERDATA {
         return this.userSubject.value;
     }
+
+    public get getusers(): USERDATA[] {
+        return this.userListSubject.value;
+    }
+
 }

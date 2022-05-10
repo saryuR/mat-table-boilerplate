@@ -68,28 +68,9 @@ export abstract class AbstractBaseClassComponent implements OnDestroy {
     return payload;
   }
 
-  public initUserDetails(): void {
-    // const Prefix$ = this.accountService.getUserPrefix();
-    // const LocalJobTitles$ = this.accountService.getLocalJobTitles(this.AccountId);
-    // const LocalDepartment$ = this.accountService.getLocalDepartment(this.AccountId);
-    // const ReportsTo$ = this.accountService.getReportsTo(this.AccountId);
-    // const roles$ = this.accountService.getRoles(this.loggedinUser.UserId, this.AccountId);
-
-    // forkJoin({ Prefix$, LocalJobTitles$, LocalDepartment$, ReportsTo$, roles$ })
-    //   .pipe(takeUntil(this.destroyed$))
-    //   .subscribe(res => {
-    //     this.prefixs = res.Prefix$;
-    //     this.localJobTitles = res.LocalJobTitles$;
-    //     this.localDepartment = res.LocalDepartment$;
-    //     this.reportsTo = res.ReportsTo$;
-    //     this.roleTypes = res.roles$;
-    //   });
-  }
-
   ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
-
 
 }

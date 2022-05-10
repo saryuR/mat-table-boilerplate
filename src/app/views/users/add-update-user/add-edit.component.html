@@ -3,119 +3,80 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="form-row">
 
+        <div class="form-group col" *ngIf="isAddMode">
+            <label for="Id">Id</label>
+            <input type="text" formControlName="id" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.id.errors }" />
+            <div *ngIf="submitted && f.id.errors" class="invalid-feedback">
+                <div *ngIf="f.id.errors.required">Id is required</div>
+            </div>
+        </div>
+
         <div class="form-group col">
-            <label for="Prefix">Prefix</label>
-            <mat-select placeholder="Select Prefix" formControlName="Prefix"
-                [ngClass]="{ 'is-invalid': submitted && f.Prefix.errors }">
-                <mat-option *ngFor="let type of prefixs" [value]="type.Prefix">
-                    {{type.Prefix}}
-                </mat-option>
-            </mat-select>
-            <div *ngIf="submitted && f.Prefix.errors" class="invalid-feedback">
-                <div *ngIf="f.Prefix.errors.required">Prefix is required</div>
+            <label for="name">Name</label>
+            <input type="text" formControlName="name" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+            <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                <div *ngIf="f.name.errors.required">Name is required</div>
             </div>
         </div>
         <div class="form-group col">
-            <label for="FirstName">First Name</label>
-            <input type="text" formControlName="FirstName" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.FirstName.errors }" />
-            <div *ngIf="submitted && f.FirstName.errors" class="invalid-feedback">
-                <div *ngIf="f.FirstName.errors.required">First Name is required</div>
-            </div>
-        </div>
-        <div class="form-group col">
-            <label for="LastName">Last Name</label>
-            <input type="text" formControlName="LastName" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.LastName.errors }" />
-            <div *ngIf="submitted && f.LastName.errors" class="invalid-feedback">
-                <div *ngIf="f.LastName.errors.required">Last Name is required</div>
+            <label for="email">Email</label>
+            <input type="email" formControlName="email" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+            <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                <div *ngIf="f.email.errors.required">Email is required</div>
             </div>
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col">
-            <label for="Email">Email</label>
-            <input type="email" formControlName="Email" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.Email.errors }" />
-            <div *ngIf="submitted && f.Email.errors" class="invalid-feedback">
-                <div *ngIf="f.Email.errors.required">Email is required</div>
+            <label for="age">Age</label>
+            <input type="number" formControlName="age" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.age.errors }" />
+            <div *ngIf="submitted && f.age.errors" class="invalid-feedback">
+                <div *ngIf="f.age.errors.required">Age is required</div>
             </div>
         </div>
         <div class="form-group col">
-            <label for="PhoneNumber">
-                Phone Number
-            </label>
-            <input type="text" formControlName="PhoneNumber" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.PhoneNumber.errors }" />
-            <div *ngIf="submitted && f.PhoneNumber.errors" class="invalid-feedback">
-                <div *ngIf="f.PhoneNumber.errors.required">Phone Number is required</div>
+            <label for="work">work</label>
+            <input type="text" formControlName="work" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.work.errors }" />
+            <div *ngIf="submitted && f.work.errors" class="invalid-feedback">
+                <div *ngIf="f.work.errors.required">Work is required</div>
             </div>
         </div>
         <div class="form-group col">
-            <label for="Departments">
-                Department
+            <label for="address">
+                Address
             </label>
-            <mat-select placeholder="Select Department" formControlName="Departments" class="form-control"
-                [ngClass]="{ 'is-invalid': submitted && f.Departments.errors }">
-                <mat-option *ngFor="let type of localDepartment" [value]="type.Id">
-                    {{type.Name}}
-                </mat-option>
-            </mat-select>
+            <input type="text" formControlName="address" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.address.errors }" />
+            <div *ngIf="submitted && f.address.errors" class="invalid-feedback">
+                <div *ngIf="f.address.errors.required">Address is required</div>
+            </div>
+        </div>
+        <div class="form-group col">
+            <label for="city">
+                City
+            </label>
+            <input type="text" formControlName="city" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.city.errors }" />
+            <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
+                <div *ngIf="f.city.errors.required">Address is required</div>
+            </div>
 
-            <div *ngIf="submitted && f.Departments.errors" class="invalid-feedback">
-                <div *ngIf="f.Departments.errors.required">Departments is required</div>
+            <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
+                <div *ngIf="f.city.errors.required">City is required</div>
             </div>
         </div>
     </div>
 
-    <div class="form-row">
-        <div class="form-group col">
-            <label for="JobTitles">Job Title</label>
-            <mat-select placeholder="Select Job Title" formControlName="JobTitleId"
-                [ngClass]="{ 'is-invalid': submitted && f.JobTitleId.errors }">
-                <mat-option *ngFor="let type of localJobTitles" [value]="type.Id">
-                    {{type.Name}}
-                </mat-option>
-            </mat-select>
-            <div *ngIf="submitted && f.JobTitleId.errors" class="invalid-feedback">
-                <div *ngIf="f.JobTitleId.errors.required">JobTitles is required</div>
-            </div>
-        </div>
-        <div class="form-group col">
-            <label for="ReportsTo">
-                Reports To
-            </label>
-            <mat-select placeholder="Select Reports To" formControlName="ReportsTo"
-                [ngClass]="{ 'is-invalid': submitted && f.ReportsTo.errors }">
-                <mat-option *ngFor="let type of reportsTo" [value]="type.Id">
-                    {{type.Name}}
-                </mat-option>
-            </mat-select>
-            <div *ngIf="submitted && f.ReportsTo.errors" class="invalid-feedback">
-                <div *ngIf="f.ReportsTo.errors.required">Reports To is required</div>
-            </div>
-        </div>
-        <div class="form-group col adjust-div">
-            <label for="Roles">
-                Roles
-            </label>
-            <mat-select placeholder="Select Roles" formControlName="Roles" multiple>
-                <mat-option *ngFor="let type of roleTypes" [value]="type.Id">
-                    {{type.Name}}
-                </mat-option>
-            </mat-select>
-
-            <div *ngIf="submitted && f.Roles.errors" class="invalid-feedback">
-                <div *ngIf="f.Roles.errors.required">Roles are required</div>
-            </div>
-        </div>
-
-    </div>
-    <div class="form-row check-box-inline" *ngIf="isAddMode">
+    <div class="form-row check-box-inline">
         <div class="px-3"></div>
         <div class="form-check form-group col">
-            <input type="checkbox" class="form-check-input" id="check-box" formControlName="sendInvitation">
-            <label class="form-check-label" for="check-box">Send Invitation</label>
+            <input type="checkbox" class="form-check-input" id="check-box" formControlName="enable">
+            <label class="form-check-label" for="check-box">Enable User</label>
         </div>
     </div>
 
