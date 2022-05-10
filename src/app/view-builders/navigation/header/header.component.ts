@@ -13,14 +13,14 @@ export class HeaderComponent implements OnInit {
   constructor(public accountService: AccountService) { }
 
   ngOnInit(): void {
-    this.accountService.userSubject.subscribe(() => {
-      this.setNavBar();
-    });
+    // this.accountService.userSubject.subscribe(() => {
+    //   this.setNavBar();
+    // });
   }
 
   setNavBar() {
-    const user = this.accountService.userValue;
-    this.showNavigation = Object.keys(user).length === 0 ? false : true;
+    // const user = this.accountService.userValue;
+    // this.showNavigation = Object.keys(user).length === 0 ? false : true;
   }
 
   public onToggleSidenav = () => {

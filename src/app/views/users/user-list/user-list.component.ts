@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -23,6 +23,7 @@ export class UserListComponent extends AbstractBaseClassComponent implements OnI
   loading = false;
 
   constructor(
+    private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
     public accountService: AccountService,
@@ -35,13 +36,8 @@ export class UserListComponent extends AbstractBaseClassComponent implements OnI
   }
 
   loadUsers(): void {
-    const storedUsers = JSON.parse(localStorage.getItem('users'));
-    if (!storedUsers) {
-      this.dataSource.data = users;
-      localStorage.setItem('users', JSON.stringify(users));
-    } else {
-      this.dataSource.data = storedUsers;
-    }
+    this.dataSource.data = users as USERDATA[];
+    localStorage.setItem('users', JSON.stringify(users));
     this.accountService.userListSubject.next(this.dataSource.data);
     this.loading = false;
   }
@@ -66,6 +62,19 @@ export class UserListComponent extends AbstractBaseClassComponent implements OnI
 
   public redirectToUpdate = (element: USERDATA) => {
     this.router.navigate(['edit', element.id], { relativeTo: this.route });
+  }
+
+  public deleteUser = (element: USERDATA) => {
+    const foundIndex = this.accountService.userListSubject.value.findIndex(x => x.id === element.id);
+    this.accountService.userListSubject.value.splice(foundIndex, 1);
+    this.dataSource.data = this.accountService.userListSubject.value;
+    this.refreshTable();
+  }
+
+  refreshTable() {
+    this.accountService.userListSubject.next(this.dataSource.data);
+    this.accountService.updateStorage(this.dataSource.data);
+    this.cdr.detectChanges();
   }
 
   public addUser() {

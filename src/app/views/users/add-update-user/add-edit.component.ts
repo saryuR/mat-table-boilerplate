@@ -31,14 +31,14 @@ export class AddEditComponent extends AbstractBaseClassComponent implements OnIn
         this.userId = this.route.snapshot?.params?.id;
         this.isAddMode = !this.userId;
         this.form = this.formBuilder.group({
-            id: ['', Validators.required],
+            id: [Math.floor(1000 + Math.random() * 9000), Validators.required],
             name: ['', Validators.required],
             age: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
             work: ['', Validators.required],
             address: ['', Validators.required],
             city: ['', Validators.required],
-            enable: ['', Validators.required],
+            enable: [false],
         });
 
         if (!this.isAddMode) {
@@ -71,8 +71,7 @@ export class AddEditComponent extends AbstractBaseClassComponent implements OnIn
     }
 
     private createUser(): void {
-        const payload = this.preparePayload(false, this.form.value);
-        this.accountService.register(payload)
+        this.accountService.register(this.form.value)
             .pipe(first())
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
@@ -88,10 +87,7 @@ export class AddEditComponent extends AbstractBaseClassComponent implements OnIn
     }
 
     private updateUser(): void {
-        const userDeatils = this.form.value;
-        userDeatils.Id = this.selectedUser.id;
-        const payload = this.preparePayload(true, userDeatils);
-        this.accountService.update(this.userId, payload)
+        this.accountService.update(this.selectedUser.id, this.form.value)
             .pipe(takeUntil(this.destroyed$))
             .pipe(first())
             .subscribe({

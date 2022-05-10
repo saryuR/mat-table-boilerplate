@@ -1,7 +1,7 @@
 export interface USERDATA {
   id: number;
   name: string;
-  age: string;
+  age: number;
   work: string;
   email: string;
   address: string;

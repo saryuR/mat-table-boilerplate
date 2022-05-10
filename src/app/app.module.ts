@@ -4,7 +4,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { ErrorInterceptor, JwtInterceptor } from './_helpers';
+// import { ErrorInterceptor, JwtInterceptor } from './_helpers';
 import { MaterialModule } from './shared/material/material.module';
 import { RoutingModule } from './view-builders/routing/routing.module';
 
@@ -35,8 +35,8 @@ const mainComponents = [
     HttpClientModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    // { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    // { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
 ],
   bootstrap: [AppComponent]
 })
