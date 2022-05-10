@@ -1,16 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { COMMON, PREFIX, USERDATA } from '../../_interface/user.model';
+import { USERDATA } from '../../_interface/user.model';
 
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
     public userListSubject: BehaviorSubject<USERDATA[]>;
 
-    constructor(
-        private http: HttpClient
-    ) {
+    constructor() {
         this.userListSubject = new BehaviorSubject<USERDATA[]>(JSON.parse(localStorage.getItem('users') || '[]'));
     }
 
@@ -27,7 +24,7 @@ export class AccountService {
         return of(this.userListSubject.value);
     }
 
-    updateStorage(users: any) {
+    public updateStorage(users: USERDATA[]): void {
         localStorage.setItem('users', JSON.stringify(users));
         this.userListSubject.next(users);
     }

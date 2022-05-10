@@ -25,17 +25,3 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
-
-
-## App Navigation
-Login into the app with following creds:
-
-```
-username: assessment@mail.com
-password :  P@ssword@123
-```
-
-
-After login you will be redirect to home page. Home page will show you the information of logged in user.
-On header you will see the `users` menu, click on that and you will be redirect to the users list.
-you can add/edit/search the user from this screen    

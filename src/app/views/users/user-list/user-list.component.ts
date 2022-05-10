@@ -1,15 +1,16 @@
+declare var require: any;
 import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator } from '@angular/material/paginator'
 
-import { users } from '../users';
 import { USERDATA } from '../../../_interface/user.model';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { AccountService } from 'src/app/shared/services/account.service';
 import { AbstractBaseClassComponent } from '../Abstract-base-class';
 
+const mockData = require('../../../../assets/data/users.json');
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
@@ -36,8 +37,8 @@ export class UserListComponent extends AbstractBaseClassComponent implements OnI
   }
 
   loadUsers(): void {
-    this.dataSource.data = users as USERDATA[];
-    localStorage.setItem('users', JSON.stringify(users));
+    this.dataSource.data = mockData.users as USERDATA[];
+    localStorage.setItem('users', JSON.stringify(mockData.users));
     this.accountService.userListSubject.next(this.dataSource.data);
     this.loading = false;
   }
@@ -60,6 +61,10 @@ export class UserListComponent extends AbstractBaseClassComponent implements OnI
     this.dataSource.filter = value.trim().toLocaleLowerCase();
   }
 
+  public addUser(): void {
+    this.router.navigate(['create-user'], { relativeTo: this.route });
+  }
+
   public redirectToUpdate = (element: USERDATA) => {
     this.router.navigate(['edit', element.id], { relativeTo: this.route });
   }
@@ -75,10 +80,6 @@ export class UserListComponent extends AbstractBaseClassComponent implements OnI
     this.accountService.userListSubject.next(this.dataSource.data);
     this.accountService.updateStorage(this.dataSource.data);
     this.cdr.detectChanges();
-  }
-
-  public addUser() {
-    this.router.navigate(['create-user'], { relativeTo: this.route });
   }
 
 
