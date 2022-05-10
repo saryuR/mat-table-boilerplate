@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "walsh-assesment": {
+    "-assesment": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/walsh-assesment",
+            "outputPath": "dist/-assesment",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -63,18 +63,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "walsh-assesment:build"
+            "browserTarget": "-assesment:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "walsh-assesment:build:production"
+              "browserTarget": "-assesment:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "walsh-assesment:build"
+            "browserTarget": "-assesment:build"
           }
         },
         "test": {
@@ -112,16 +112,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "walsh-assesment:serve"
+            "devServerTarget": "-assesment:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "walsh-assesment:serve:production"
+              "devServerTarget": "-assesment:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "walsh-assesment"
+  "defaultProject": "-assesment"
 }

@@ -9,6 +9,7 @@ import { USERDATA } from '../../../_interface/user.model';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { AccountService } from 'src/app/shared/services/account.service';
 import { AbstractBaseClassComponent } from '../Abstract-base-class';
+import { users } from '../users';
 
 @Component({
   selector: 'app-user-list',
@@ -31,9 +32,15 @@ export class UserListComponent extends AbstractBaseClassComponent implements OnI
   }
 
   ngOnInit() {
-    this.getAllUsers();
+    // this.getAllUsers();
   }
 
+  loadUsers(): void {
+    this.dataSource.data = users;
+    this.loading = false;
+
+  }
+ 
   public getAllUsers = () => {
     this.loading = true;
     this.dataSource.data = [];
@@ -64,7 +71,7 @@ export class UserListComponent extends AbstractBaseClassComponent implements OnI
   }
 
   public redirectToUpdate = (element: USERDATA) => {
-    this.router.navigate(['edit', element.UserId], { relativeTo: this.route });
+    this.router.navigate(['edit', element.id], { relativeTo: this.route });
   }
 
   public addUser() {

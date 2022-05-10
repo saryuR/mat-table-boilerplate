@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  urlAddress: 'https://walshapix.azurewebsites.net'
+  urlAddress: 'https://apix.azurewebsites.net'
 };
 
 /*

@@ -1,61 +1,11 @@
 export interface USERDATA {
-  Id: number;
-  UserId: string;
-  Email: string;
-  Password: string;
-  ConfirmPassword: string;
-  FirstName: string;
-  LastName: string;
-  DisplayName: string;
-  access_token?: string;
-  Accounts: [
-    {
-      AccountId: number;
-      AccountGroupId: number;
-      AccountStatus: string;
-      Contract: string;
-      ReportsTo: [
-        {
-          Id: number;
-          Name: string
-        }
-      ];
-      JobTitles: [
-        {
-          Id: number;
-          Name: string
-        }
-      ];
-      Departments: [
-        {
-          Id: number;
-          Name: string
-        }
-      ];
-      Roles: [
-        {
-          Id: number;
-          Name: string
-        }
-      ]
-    }
-  ];
-  Prefix: [
-    {
-      Id: number;
-      Prefix: string
-    }
-  ];
-  PhoneNumber: string;
-  Status: string;
-  LockoutEnabled: boolean;
-  PasswordExpired: boolean;
-  CreatedBy: string;
-  CreateTimestamp: string;
-  ModifiedBy: string;
-  ModifiedTimestamp: string;
-  DataStateFlag: string;
-  UserPrefix: string;
+  id: number;
+  name: string;
+  work: string;
+  email: string;
+  address: string;
+  city: string;
+  enable: boolean;
 }
 export interface USERVIEWPROFILE {
   Id: number;

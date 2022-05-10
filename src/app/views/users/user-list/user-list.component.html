@@ -3,59 +3,52 @@
     <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter">
   </mat-form-field>
   <button mat-raised-button color="primary" class="float-right" (click)="addUser()">Add User</button>
+  <button mat-raised-button color="primary" class="float-right" (click)="loadUsers()">Load Data</button>
   <div>
   </div>
 </div>
 <div class="table-container">
   <table mat-table [dataSource]="dataSource" matSort matSortActive="FirstName" matSortDirection="asc" matSortDisableClear>
-    <ng-container matColumnDef="FirstName">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.FirstName}} </td>
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
     </ng-container>
   
-    <ng-container matColumnDef="LastName">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.LastName}} </td>
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
     </ng-container>
   
-    <ng-container matColumnDef="Email">
+    <ng-container matColumnDef="work">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Work </th>
+      <td mat-cell *matCellDef="let element"> {{element.work}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
-      <td mat-cell *matCellDef="let element"> {{element.Email}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="city">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> City </th>
+      <td mat-cell *matCellDef="let element"> {{element.city}} </td>
     </ng-container>
   
-    <ng-container matColumnDef="walshrole">
-      <th mat-header-cell *matHeaderCellDef> Walsh Role </th>
-      <td mat-cell *matCellDef="let element">
-        <ng-container *ngFor="let account of element.Accounts">
-          <ng-container *ngIf="account.AccountId === AccountId">
-            <ng-container *ngFor="let role of account.Roles">
-              <button mat-raised-button color="accent" [disableRipple]="true">{{role.Name}} </button>&nbsp;&nbsp;
-            </ng-container>
-          </ng-container>
-        </ng-container>
-      </td>
+    <ng-container matColumnDef="address">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Address </th>
+      <td mat-cell *matCellDef="let element"> {{element.address}} </td>
     </ng-container>
+    
   
     <ng-container matColumnDef="update">
       <th mat-header-cell *matHeaderCellDef> Update </th>
       <td mat-cell *matCellDef="let element">
-        <ng-container *ngIf="isAdmin">
+        <ng-container>
           <button mat-icon-button color="accent" (click)="redirectToUpdate(element)">
             <mat-icon class="mat-18">edit</mat-icon>
           </button>
         </ng-container>
         
-      </td>
-    </ng-container>
-  
-    <ng-container matColumnDef="action">
-      <th mat-header-cell *matHeaderCellDef> Action </th>
-      <td mat-cell *matCellDef="let element">
-        <ng-container *ngIf="isAdmin">
-        <button mat-raised-button	color="warn" (click)="markUserAsInActive(element)">
-          Mark In-active
-        </button>
-      </ng-container>
       </td>
     </ng-container>
   

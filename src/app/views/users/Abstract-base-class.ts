@@ -8,7 +8,7 @@ import { AccountService } from '../../shared/services/account.service';
 @Injectable()
 export abstract class AbstractBaseClassComponent implements OnDestroy {
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  public displayedColumns = ['FirstName', 'LastName', 'Email', 'walshrole', 'update', 'action'];
+  public displayedColumns = ['id', 'name', 'work', 'email', 'city', 'address',  'update'];
   pageNumber = 0;
   pageSize = 2;
   adminRoleId = 3;
@@ -24,8 +24,8 @@ export abstract class AbstractBaseClassComponent implements OnDestroy {
 
   constructor() {
     this.loggedinUser = this.getLoggedInUser();
-    this.AccountId = this.loggedinUser.Accounts[0].AccountId;
-    this.isAdmin = this.isAccountAdmin(this.loggedinUser.Accounts[0].Roles);
+    // this.AccountId = this.loggedinUser.Accounts[0].AccountId;
+    // this.isAdmin = this.isAccountAdmin(this.loggedinUser.Accounts[0].Roles);
   }
 
   public isAccountAdmin(roles: COMMON[]): boolean {
@@ -41,7 +41,7 @@ export abstract class AbstractBaseClassComponent implements OnDestroy {
   public preparePayload(isUpdate: boolean, userData: any, isInActive?: boolean): any {
     const payload: any = {
       LoggedInRoleId: this.adminRoleId,
-      AccountId: this.loggedinUser.Accounts[0].AccountId,
+      // AccountId: this.loggedinUser.Accounts[0].AccountId,
       Roles: userData.Roles,
       Email: userData.Email,
       Password: 'Test@123',
@@ -69,21 +69,21 @@ export abstract class AbstractBaseClassComponent implements OnDestroy {
   }
 
   public initUserDetails(): void {
-    const Prefix$ = this.accountService.getUserPrefix();
-    const LocalJobTitles$ = this.accountService.getLocalJobTitles(this.AccountId);
-    const LocalDepartment$ = this.accountService.getLocalDepartment(this.AccountId);
-    const ReportsTo$ = this.accountService.getReportsTo(this.AccountId);
-    const roles$ = this.accountService.getRoles(this.loggedinUser.UserId, this.AccountId);
+    // const Prefix$ = this.accountService.getUserPrefix();
+    // const LocalJobTitles$ = this.accountService.getLocalJobTitles(this.AccountId);
+    // const LocalDepartment$ = this.accountService.getLocalDepartment(this.AccountId);
+    // const ReportsTo$ = this.accountService.getReportsTo(this.AccountId);
+    // const roles$ = this.accountService.getRoles(this.loggedinUser.UserId, this.AccountId);
 
-    forkJoin({ Prefix$, LocalJobTitles$, LocalDepartment$, ReportsTo$, roles$ })
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(res => {
-        this.prefixs = res.Prefix$;
-        this.localJobTitles = res.LocalJobTitles$;
-        this.localDepartment = res.LocalDepartment$;
-        this.reportsTo = res.ReportsTo$;
-        this.roleTypes = res.roles$;
-      });
+    // forkJoin({ Prefix$, LocalJobTitles$, LocalDepartment$, ReportsTo$, roles$ })
+    //   .pipe(takeUntil(this.destroyed$))
+    //   .subscribe(res => {
+    //     this.prefixs = res.Prefix$;
+    //     this.localJobTitles = res.LocalJobTitles$;
+    //     this.localDepartment = res.LocalDepartment$;
+    //     this.reportsTo = res.ReportsTo$;
+    //     this.roleTypes = res.roles$;
+    //   });
   }
 
   ngOnDestroy(): void {

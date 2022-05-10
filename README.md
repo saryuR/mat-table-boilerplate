@@ -1,4 +1,4 @@
-# WalshAssesment
+# Assesment
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.7 and node v12.22.3
 
@@ -31,7 +31,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 Login into the app with following creds:
 
 ```
-username: walshassessment@mail.com
+username: assessment@mail.com
 password :  P@ssword@123
 ```
 

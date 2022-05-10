@@ -14,11 +14,11 @@ export class HomeComponent implements OnInit {
   constructor(public accountService: AccountService) { }
 
   ngOnInit() {
-    this.accountService.getById(this.accountService.userSubject.value.UserId)
-      .subscribe(response => {
-        this.userData = response;
-        localStorage.setItem('currentLoggedInUser', JSON.stringify(response));
-      });
+    // this.accountService.getById(this.accountService.userSubject.value.id)
+    //   .subscribe(response => {
+    //     this.userData = response;
+    //     localStorage.setItem('currentLoggedInUser', JSON.stringify(response));
+    //   });
   }
 
 }
